@@ -1,0 +1,368 @@
+
+DROP TABLE APRJ20010;
+
+DROP TABLE APRJ20011;
+
+DROP TABLE APRJ20020;
+
+DROP TABLE APRJ20021;
+
+DROP TABLE APRJ20022;
+
+DROP TABLE APRJ20030;
+
+DROP TABLE APRJ20032;
+
+DROP TABLE APRJ20033;
+
+DROP TABLE APRJ20034;
+
+DROP TABLE APRJ20040;
+
+DROP TABLE APRJ20041;
+
+DROP TABLE APRJ20050;
+
+CREATE TABLE APRJ20010
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    PRJ_SER_NUM          NUMERIC(5) NOT NULL,
+    PRJ_ID               VARCHAR(10) NULL,
+    PRJ_NM               VARCHAR(100) NULL,
+    PRJ_VER              VARCHAR(10) NULL,
+    PRJ_CTT              VARCHAR(200) NULL,
+    EFF_STA_DT           VARCHAR(8) NULL,
+    EFF_END_DT           VARCHAR(8) NULL,
+    PROC_ST_CD           VARCHAR(4) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20010_PK ON APRJ20010
+(
+    CO_ID ASC,
+    PRJ_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20011
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    PRJ_SER_NUM          NUMERIC(5) NOT NULL,
+    FILE_SER_NUM         NUMERIC(5) NOT NULL,
+    CTRL_SER_NUM         NUMERIC(5) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    REQ_SER_NUM          NUMERIC(5) NOT NULL,
+    RES_SER_NUM          NUMERIC(5) NOT NULL,
+    LGC_FILE_NM          VARCHAR(100) NULL,
+    PSC_FILE_NM          VARCHAR(100) NULL,
+    FILE_PATH            VARCHAR(200) NULL,
+    FILE_SIZE            NUMERIC(15) NULL,
+    DLOAD_CNT            NUMERIC(5) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20011_PK ON APRJ20011
+(
+    CO_ID ASC,
+    PRJ_SER_NUM ASC,
+    FILE_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20020
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    PRJ_SER_NUM          NUMERIC(5) NOT NULL,
+    CTRL_SER_NUM         NUMERIC(5) NOT NULL,
+    CTRL_NUM             VARCHAR(20) NULL,
+    CTRL_NM              VARCHAR(100) NULL,
+    CTRL_CTT             VARCHAR(200) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20020_PK ON APRJ20020
+(
+    CO_ID ASC,
+    PRJ_SER_NUM ASC,
+    CTRL_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20021
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    PRJ_SER_NUM          NUMERIC(5) NOT NULL,
+    CTRL_SER_NUM         NUMERIC(5) NOT NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20021_PK ON APRJ20021
+(
+    CO_ID ASC,
+    PRJ_SER_NUM ASC,
+    CTRL_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20022
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    PRJ_SER_NUM          NUMERIC(5) NOT NULL,
+    CTRL_SER_NUM         NUMERIC(5) NOT NULL,
+    STM_SER_NUM          NUMERIC(5) NOT NULL,
+    STM_CL_CD            VARCHAR(4) NULL,
+    STM_SEQ_NUM          NUMERIC(5) NULL,
+    STM_ID               VARCHAR(20) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20022_PK ON APRJ20022
+(
+    CO_ID ASC,
+    PRJ_SER_NUM ASC,
+    CTRL_SER_NUM ASC,
+    STM_SER_NUM ASC
+);
+
+
+CREATE TABLE APRJ20030
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    OP_SEQ_NUM           NUMERIC(5) NULL,
+    REQ_TYP_CD           VARCHAR(4) NULL,
+    OP_NM                VARCHAR(40) NULL,
+    OP_CTT               VARCHAR(200) NULL,
+    CYCL_ID              VARCHAR(10) NULL,
+    STM_ID               VARCHAR(20) NULL,
+    PRD_CNT              NUMERIC(5) NULL,
+    CYCL_CL_CD           VARCHAR(4) NULL,
+    STD_DT               VARCHAR(8) NULL,
+    EFF_STA_DT           VARCHAR(8) NULL,
+    EFF_END_DT           VARCHAR(8) NULL,
+    TRAN_DT              VARCHAR(8) NULL,
+    TRAN_ST_CD           VARCHAR(4) NULL,
+    PRJ_ID               VARCHAR(10) NOT NULL,
+    CTRL_NUM             VARCHAR(20) NOT NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20030_PK ON APRJ20030
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20031
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    CYCL_SER_NUM         VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    CYCL_NM              VARCHAR(40) NULL,
+    PRD_CNT              NUMERIC(5) NULL,
+    CYCL_CL_CD           VARCHAR(4) NULL,
+    STD_DT               VARCHAR(8) NULL,
+    STD_시               VARCHAR(2) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20031_PK ON APRJ20031
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    CYCL_SER_NUM ASC,
+    OP_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20032
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    STM_SER_NUM          NUMERIC(5) NOT NULL,
+    STM_SEQ_NUM          NUMERIC(5) NULL,
+    STM_CL_CD            VARCHAR(4) NULL,
+    OP_CHRG_ID           VARCHAR(10) NULL,
+    USER_ID              VARCHAR(20) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20032_PK ON APRJ20032
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    STM_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20033
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    OP_CHRG_ID           VARCHAR(10) NOT NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20033_PK ON APRJ20033
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    OP_CHRG_ID ASC
+);
+
+CREATE TABLE APRJ20034
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    OP_CHRG_ID           VARCHAR(10) NOT NULL,
+    USER_ID              VARCHAR(20) NOT NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20034_PK ON APRJ20034
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    OP_CHRG_ID ASC,
+    USER_ID ASC
+);
+
+CREATE TABLE APRJ20040
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    REQ_SER_NUM          NUMERIC(5) NOT NULL,
+    REQ_SEQ_NUM          NUMERIC(5) NULL,
+    REQ_TYP_CD           NUMERIC(5) NULL,
+    REQ_CTT              VARCHAR(200) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20040_PK ON APRJ20040
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    REQ_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20041
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    REQ_SER_NUM          NUMERIC(5) NOT NULL,
+    ITM_SER_NUM          NUMERIC(5) NOT NULL,
+    ITM_VAL              VARCHAR(50) NULL,
+    ITM_CTT              VARCHAR(200) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20041_PK ON APRJ20041
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    REQ_SER_NUM ASC,
+    ITM_SER_NUM ASC
+);
+
+CREATE TABLE APRJ20050
+(
+    CO_ID                VARCHAR(10) NOT NULL,
+    OP_ID                VARCHAR(10) NOT NULL,
+    OP_SER_NUM           NUMERIC(5) NOT NULL,
+    REQ_SER_NUM          NUMERIC(5) NOT NULL,
+    RES_SER_NUM          NUMERIC(5) NOT NULL,
+    RES_CTT              VARCHAR(200) NULL,
+    DEL_YN               VARCHAR(1) NULL,
+    RGST_ID              VARCHAR(20) NULL,
+    RGST_IP              VARCHAR(20) NULL,
+    RGST_DTM             VARCHAR(14) NULL,
+    UPDT_ID              VARCHAR(20) NULL,
+    UPDT_IP              VARCHAR(20) NULL,
+    UPDT_DTM             VARCHAR(14) NULL
+);
+
+CREATE UNIQUE INDEX APRJ20050_PK ON APRJ20050
+(
+    CO_ID ASC,
+    OP_ID ASC,
+    OP_SER_NUM ASC,
+    REQ_SER_NUM ASC,
+    RES_SER_NUM ASC
+);

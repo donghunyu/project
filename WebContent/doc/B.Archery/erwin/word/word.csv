@@ -1,0 +1,74 @@
+값,VAL,Value,X
+건수,CNT,Count,X
+게시,BT,Bulletin,X
+게시물,BT,Bulletin Contents,X
+게시판,BT_BORD,Bulletin Board,X
+경로,PATH,Path,X
+고객,CUST,Cust,X
+관리,MNG,Manage,X
+관리자,ADM,Administrator,X
+구분,CL,Classification,X
+권한,AUTH,Authority,X
+그룹,GRP,Group,X
+내용,CTT,Content,X
+논리,LGC,Logical,X
+단위,UNT,Unit,X
+댓글,CMT,Comm,X
+등록,REG,Regist,X
+레벨,LVL,Level,X
+메뉴,MENU,Menu,X
+메세지,MSG,Message,X
+명,NM,Name,X
+모바일,MBL,Mobile,X
+물리,PSC,Physical,X
+번호,NUM,Number,X
+변수,VAR,Variable,X
+비밀번호,PWD,Password,X
+사용자,USER,User,X
+삭제,DEL,Delete,X
+상위,SUP,Super,X
+수정,UPD,Update,X
+순번,SEQ,Sequence,X
+시스템,SYS,System,X
+시작,STA,Start,X
+여부,YN,Yes or No,X
+유형,TYP,Type,X
+유효,EFF,Effect,X
+이력,HST,History,X
+일련번호,SER_NUM,Serial Number,X
+일시,DTM,Date Time,X
+일자,DT,Date,X
+전자메일,MAIL,Electronic Mail,X
+전화,PHON,Phone,X
+접속,CON,Connection,X
+제목,TITL,Title,X
+종료,END,End,X
+주소,ADDR,Address,X
+최대,MAX,Maximum,X
+최소,MIN,Minimum,X
+코드,CD,Code,X
+파라미터,PARAM,Parameter,X
+파일,FILE,File,X
+ACTION,ACT,Action,X
+IP,IP,Internet Protocol,X
+SIZE,SIZE,Size,X
+URL,URL,Uniform Resource Locator,X
+ID,ID,Identification,X
+부서,DEPT,Department,X
+메일,MAIL,Mail,X
+우편번호,ZIP_NUM,Zip Number,X
+상세,DTL,Detail,X
+정,PVL,Pavilion,X
+과녁,TG,Target,X
+생년월일,BTD,Birthday,X
+회원,MB,Member,X
+성별,GD,Gender,X
+대회,TNMT,Tournament,X
+참가,CPT,Compete,X
+장소,PLC,Place,X
+사대,SP,a standing position when shooting an arrow,X
+수,CNT,Count,X
+순,SOON,,X
+시,SI,,X
+점수,SC,Score,X
+그룹사,GRP_CO,Group Company ,X

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Zcom99032Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    ZCOM99032.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchDeptId)">
+            AND    ZCOM99032.DEPT_ID                     LIKE CONCAT('%', #{srchDeptId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchDeptNm)">
+            AND    ZCOM99032.DEPT_NM                     LIKE CONCAT('%', #{srchDeptNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchDeptCtt)">
+            AND    ZCOM99032.DEPT_CTT                       = #{srchDeptCtt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchSupDeptId)">
+            AND    ZCOM99032.SUP_DEPT_ID                    = #{srchSupDeptId}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     ZCOM99032.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , ZCOM99032.DEPT_ID                       deptId                            /* 부서 ID                        */
+                   , ZCOM99032.DEPT_NM                       deptNm                            /* 부서 명                        */
+                   , ZCOM99032.DEPT_CTT                      deptCtt                           /* 부서 내용                      */
+                   , ZCOM99032.SUP_DEPT_ID                   supDeptId                         /* 상위 부서 ID                   */
+                   , SUP_DEPT .DEPT_NM                       supDeptNm                         /* 상위 부서 명                   */
+                   , ZCOM99032.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99032.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99032.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , ZCOM99032.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , ZCOM99032.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , ZCOM99032.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , ZCOM99032.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , ZCOM99032.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , ZCOM99032.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   ZCOM99032
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = ZCOM99032.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99032 SUP_DEPT
+                   ON     SUP_DEPT.CO_ID       = ZCOM99032.CO_ID
+                   AND    SUP_DEPT.DEPT_ID     = ZCOM99032.SUP_DEPT_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = ZCOM99032.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = ZCOM99032.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryExcel" >
+        <![CDATA[
+            SELECT
+                     ZCOM99032.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , ZCOM99032.DEPT_ID                       deptId                            /* 부서 ID                        */
+                   , ZCOM99032.DEPT_NM                       deptNm                            /* 부서 명                        */
+                   , ZCOM99032.DEPT_CTT                      deptCtt                           /* 부서 내용                      */
+                   , ZCOM99032.SUP_DEPT_ID                   supDeptId                         /* 상위 부서 ID                   */
+                   , SUP_DEPT .DEPT_NM                       supDeptNm                         /* 상위 부서 명                   */
+                   , ZCOM99032.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99032.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99032.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , ZCOM99032.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , ZCOM99032.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , ZCOM99032.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , ZCOM99032.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , ZCOM99032.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , ZCOM99032.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   ZCOM99032
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = ZCOM99032.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99032 SUP_DEPT
+                   ON     SUP_DEPT.CO_ID       = ZCOM99032.CO_ID
+                   AND    SUP_DEPT.DEPT_ID     = ZCOM99032.SUP_DEPT_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = ZCOM99032.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = ZCOM99032.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_부서리스트조회 -->
+    <select id="selectZCOM99032_00" parameterType="Zcom99032Model" resultType="Zcom99032Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99032.CO_ID                         
+                   , ZCOM99032.DEPT_ID                       
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 관리자_부서리스트수조회 -->
+    <select id="selectZCOM99032_01" parameterType="Zcom99032Model" resultType="Zcom99032Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_부서조회 -->
+    <select id="selectZCOM99032_02" parameterType="Zcom99032Model" resultType="Zcom99032Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99032.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    ZCOM99032.DEPT_ID                        = #{deptId}                         /* 부서 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_하위부서조회 -->
+    <select id="selectZCOM99032_03" parameterType="Zcom99032Model" resultType="Zcom99032Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99032.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    ZCOM99032.SUP_DEPT_ID                    = #{deptId}                         /* 상위 부서 ID                   */
+            ORDER BY 
+                     ZCOM99032.CO_ID                         
+                   , ZCOM99032.DEPT_ID                       
+        ]]>
+    </select>
+
+
+    <!-- 관리자_부서리스트조회 -->
+    <select id="selectZCOM99032_10" parameterType="Zcom99032Model" resultType="java.util.Map" >
+        <include refid="InlineViewQueryExcel" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99032.CO_ID                         
+                   , ZCOM99032.DEPT_ID                       
+        ]]>
+    </select>
+
+
+    <!-- 관리자_부서등록 -->
+    <insert id="insertZCOM99032_00" parameterType="Zcom99032Model" >
+        <![CDATA[
+            INSERT INTO ZCOM99032
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , DEPT_ID                           /* 부서 ID                        */
+                   , DEPT_NM                           /* 부서 명                        */
+                   , DEPT_CTT                          /* 부서 내용                      */
+                   , SUP_DEPT_ID                       /* 상위 부서 ID                   */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{deptId}                         /* 부서 ID                        */
+                   , #{deptNm}                         /* 부서 명                        */
+                   , #{deptCtt}                        /* 부서 내용                      */
+                   , #{supDeptId}                      /* 상위 부서 ID                   */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_부서수정 -->
+    <update id="updateZCOM99032_00" parameterType="Zcom99032Model" >
+        <![CDATA[
+            UPDATE ZCOM99032 SET
+                     DEPT_NM                        = #{deptNm}                         /* 부서 명                        */
+                   , DEPT_CTT                       = #{deptCtt}                        /* 부서 내용                      */
+                   , SUP_DEPT_ID                    = #{supDeptId}                      /* 상위 부서 ID                   */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    DEPT_ID                        = #{deptId}                         /* 부서 ID                        */
+        ]]>
+    </update>
+
+
+    <!-- 관리자_부서삭제 -->
+    <delete id="deleteZCOM99032_00" parameterType="Zcom99032Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99032
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    DEPT_ID                        = #{deptId}                         /* 부서 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_부서삭제 -->
+    <delete id="deleteZCOM99032_01" parameterType="Zcom99032Model" >
+        <![CDATA[
+            TRUNCATE TABLE ZCOM99032
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_부서삭제 -->
+    <delete id="deleteZCOM99032_10" parameterType="Zcom99030Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99032
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

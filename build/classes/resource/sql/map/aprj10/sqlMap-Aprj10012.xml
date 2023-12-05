@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj10012Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ10012.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchAstId)">
+            AND    APRJ10012.AST_ID                      LIKE CONCAT('%', #{srchAstId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchAstNm)">
+            AND    APRJ10012.AST_NM                      LIKE CONCAT('%', #{srchAstNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchAstCtt)">
+            AND    APRJ10012.AST_CTT                        = #{srchAstCtt}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ10012.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ10012.AST_ID                        astId                             /* 자산 ID                        */
+                   , APRJ10012.AST_NM                        astNm                             /* 자산 명                        */
+                   , APRJ10012.AST_CTT                       astCtt                            /* 자산 내용                      */
+                   , APRJ10012.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10012.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10012.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10012.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10012.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10012.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10012.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10012
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ10012.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10012.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10012.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 설정_자산리스트조회 -->
+    <select id="selectAPRJ10012_00" parameterType="Aprj10010Model" resultType="Aprj10010Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ10012.CO_ID                         
+                   , APRJ10012.AST_ID                        
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 설정_자산리스트수조회 -->
+    <select id="selectAPRJ10012_01" parameterType="Aprj10010Model" resultType="Aprj10010Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 설정_자산조회 -->
+    <select id="selectAPRJ10012_02" parameterType="Aprj10010Model" resultType="Aprj10010Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ10012.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10012.AST_ID                         = #{astId}                          /* 자산 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 설정_자산리스트조회 -->
+    <select id="selectAPRJ10012_10" parameterType="Aprj10010Model" resultType="java.util.Map" >
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ10012.CO_ID                         
+                   , APRJ10012.AST_ID                        
+        ]]>
+    </select>
+
+
+    <!-- 설정_자산등록 -->
+    <insert id="insertAPRJ10012_00" parameterType="Aprj10010Model" >
+        <![CDATA[
+            INSERT INTO APRJ10012
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , AST_CTT                           /* 자산 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{astId}                          /* 자산 ID                        */
+                   , #{astNm}                          /* 자산 명                        */
+                   , #{astCtt}                         /* 자산 내용                      */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 설정_자산등록 -->
+    <insert id="insertAPRJ10012_10" parameterType="AprjModel" >
+        <![CDATA[
+            INSERT INTO APRJ10012
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , AST_CTT                           /* 자산 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , AST_CTT                           /* 자산 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            FROM   APRJ10012
+            WHERE  1 = 1
+            AND    CO_ID = '0000000000'
+        ]]>
+    </insert>
+
+
+    <!-- 설정_자산수정 -->
+    <update id="updateAPRJ10012_00" parameterType="Aprj10010Model" >
+        <![CDATA[
+            UPDATE APRJ10012 SET
+                     AST_NM                         = #{astNm}                          /* 자산 명                        */
+                   , AST_CTT                        = #{astCtt}                         /* 자산 내용                      */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    AST_ID                         = #{astId}                          /* 자산 ID                        */
+        ]]>
+    </update>
+
+
+    <!-- 설정_자산삭제 -->
+    <delete id="deleteAPRJ10012_00" parameterType="Aprj10010Model" >
+        <![CDATA[
+            DELETE FROM APRJ10012
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    AST_ID                         = #{astId}                          /* 자산 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 설정_자산삭제 -->
+    <delete id="deleteAPRJ10012_01" parameterType="Aprj10010Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ10012
+        ]]>
+    </delete>
+
+
+    <!-- 설정_자산삭제 -->
+    <delete id="deleteAPRJ10012_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ10012
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+
+</mapper>

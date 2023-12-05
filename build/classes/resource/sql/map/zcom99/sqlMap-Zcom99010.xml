@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Zcom99010Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchGrpCd)">
+            AND    ZCOM99010.GRP_CD                         = #{srchGrpCd}
+        </if>
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchGrpCdNm)">
+            AND    ZCOM99010.GRP_CD_NM                      = #{srchGrpCdNm}
+        </if>
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchGrpCdCtt)">
+            AND    ZCOM99010.GRP_CD_CTT                     = #{srchGrpCdCtt}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     ZCOM99010.GRP_CD                        grpCd                             /* 그룹 코드                      */
+                   , ZCOM99010.GRP_CD_NM                     grpCdNm                           /* 그룹 코드 명                   */
+                   , ZCOM99010.GRP_CD_CTT                    grpCdCtt                          /* 그룹 코드 내용                 */
+                   , ZCOM99010.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99010.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99010.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , GRP      .GRP_CO_NM                     grpCoNm                           /* 그룹사명                       */
+                   , ZCOM99010.REG_USER_NUM                  regUserNum                        /* 등록 ID                        */
+                   , UPD      .USER_NM                       regNm                             /* 등록 명                        */
+                   , ZCOM99010.REG_IP                        regIp                             /* 등록 IP                        */
+                   , ZCOM99010.REG_DTM                       regDtm                            /* 등록 일시                      */
+                   , ZCOM99010.UPD_USER_NUM                  updUserNum                        /* 수정 ID                        */
+                   , UPD      .USER_NM                       updNm                             /* 수정 명                        */
+                   , ZCOM99010.UPD_IP                        updIp                             /* 수정 IP                        */
+                   , ZCOM99010.UPD_DTM                       updDtm                            /* 수정 일시                      */
+
+            FROM   ZCOM99010
+
+                   LEFT OUTER JOIN ZCOM99000 GRP
+                   ON     GRP.GRP_CO_ID = ZCOM99010.GRP_CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 REG
+                   ON     REG.GRP_CO_ID = ZCOM99010.GRP_CO_ID
+                   AND    REG.USER_NUM  = ZCOM99010.REG_USER_NUM
+
+                   LEFT OUTER JOIN ZCOM99030 UPD
+                   ON     UPD.GRP_CO_ID = ZCOM99010.GRP_CO_ID
+                   AND    UPD.USER_NUM  = ZCOM99010.UPD_USER_NUM
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_그룹코드리스트조회 -->
+    <select id="selectZCOM99010_00" parameterType="Zcom99010Model" resultType="Zcom99010Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99010.GRP_CD                        
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 관리자_그룹코드리스트수조회 -->
+    <select id="selectZCOM99010_01" parameterType="Zcom99010Model" resultType="Zcom99010Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_그룹코드조회 -->
+    <select id="selectZCOM99010_02" parameterType="Zcom99010Model" resultType="Zcom99010Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99010.GRP_CD                         = #{grpCd}                          /* 그룹 코드                      */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_그룹코드등록 -->
+    <insert id="insertZCOM99010_00" parameterType="Zcom99010Model" >
+        <![CDATA[
+            INSERT INTO ZCOM99010
+            (
+                     GRP_CD                            /* 그룹 코드                      */
+                   , GRP_CD_NM                         /* 그룹 코드 명                   */
+                   , GRP_CD_CTT                        /* 그룹 코드 내용                 */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , REG_USER_NUM                      /* 등록 사용자 번호               */
+                   , REG_IP                            /* 등록 IP                        */
+                   , REG_DTM                           /* 등록 일시                      */
+                   , UPD_USER_NUM                      /* 수정 사용자 번호               */
+                   , UPD_IP                            /* 수정 IP                        */
+                   , UPD_DTM                           /* 수정 일시                      */
+            ) VALUES (
+                     #{grpCd}                          /* 그룹 코드                      */
+                   , #{grpCdNm}                        /* 그룹 코드 명                   */
+                   , #{grpCdCtt}                       /* 그룹 코드 내용                 */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{regUserNum}                     /* 등록 사용자 번호               */
+                   , #{regIp}                          /* 등록 IP                        */
+                   , #{regDtm}                         /* 등록 일시                      */
+                   , #{updUserNum}                     /* 수정 사용자 번호               */
+                   , #{updIp}                          /* 수정 IP                        */
+                   , #{updDtm}                         /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_그룹코드수정 -->
+    <update id="updateZCOM99010_00" parameterType="Zcom99010Model" >
+        <![CDATA[
+            UPDATE ZCOM99010 SET
+                     GRP_CD_NM                      = #{grpCdNm}                        /* 그룹 코드 명                   */
+                   , GRP_CD_CTT                     = #{grpCdCtt}                       /* 그룹 코드 내용                 */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPD_USER_NUM                   = #{updUserNum}                     /* 수정 사용자 번호               */
+                   , UPD_IP                         = #{updIp}                          /* 수정 IP                        */
+                   , UPD_DTM                        = #{updDtm}                         /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    GRP_CD                         = #{grpCd}                          /* 그룹 코드                      */
+        ]]>
+    </update>
+
+
+    <!-- 관리자_그룹코드삭제 -->
+    <delete id="deleteZCOM99010_00" parameterType="Zcom99010Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99010
+            WHERE  1 = 1
+            AND    GRP_CD                         = #{grpCd}                          /* 그룹 코드                      */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_그룹코드삭제 -->
+    <delete id="deleteZCOM99010_01" parameterType="Zcom99010Model" >
+        <![CDATA[
+            TRUNCATE TABLE ZCOM99010
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_그룹코드삭제 -->
+    <delete id="deleteZCOM99010_02" parameterType="Zcom99010Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99010
+            WHERE  1 = 1
+            AND    CO_ID = #{coId}
+        ]]>
+    </delete>
+
+</mapper>

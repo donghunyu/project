@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj20053Query">
+
+
+
+    <sql id="WhereQuery" >
+        <!-- 
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+        <![CDATA[
+            AND    APRJ20050.CO_ID                        = #{srchCoId}                           /* 업체 ID                        */
+        ]]>
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStaDt)">
+        <![CDATA[
+            AND    APRJ20030.STD_DT                      >= #{srchStaDt}
+        ]]>
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchEndDt)">
+        <![CDATA[
+            AND    APRJ20030.STD_DT                      <= #{srchEndDt}
+        ]]>
+        </if>
+         
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpId)">
+            AND    APRJ20050.OP_ID                       LIKE CONCAT('%', #{srchOpId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpSerNum)">
+            AND    APRJ20050.OP_SER_NUM                  LIKE CONCAT('%', #{srchOpSerNum}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpNm)">
+            AND    APRJ20030.OP_NM                       LIKE CONCAT('%', #{srchOpNm}, '%')
+        </if>
+        
+        
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpChrgId)">
+            AND    APRJ20050.OP_CHRG_ID                     = #{srchOpChrgId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpChrgNm)">
+            AND    APRJ10020.OP_CHRG_NM                  LIKE CONCAT('%', #{srchOpChrgNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserId)">
+            AND    APRJ20050.USER_ID                        = #{srchUserId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserNm)">
+            AND    ZCOM99030.USER_NM                     LIKE CONCAT('%', #{srchUserNm}, '%')
+        </if>
+         -->
+        
+        
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStmUserId)">
+            AND    APRJ20050.stmUserId                      = #{srchStmUserId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStmUserNm)">
+            AND    APRJ20050.stmUserNm                   LIKE CONCAT('%', #{srchStmUserNm}, '%')
+        </if>
+
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ20050.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20050.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20050.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20050.OP_CHRG_ID                    opChrgId                          /* 업무 담당 ID                   */
+                   , APRJ10020.OP_CHRG_NM                    opChrgNm                          /* 업무 담당 명                   */
+                   , APRJ20050.USER_ID                       userId                            /* 사용자 ID                      */
+                   , ZCOM99030.USER_NM                       userNm                            /* 사용자 명                      */
+                   , APRJ20050.RES_SER_NUM                   resSerNum                         /* 응답 일련번호                  */
+
+                   , APRJ20036.STM_SER_NUM                   stmSerNum                         /* 결제 일련번호                  */
+                   , APRJ20036.STM_SEQ_NUM                   stmSeqNum                         /* 결제 순번                      */
+                   , APRJ20036.STM_CL_CD                     stmClCd                           /* 결제 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000003'
+                        AND    ZCOM99011.CD     = APRJ20036.STM_CL_CD
+                     )                                       stmClNm                           /* 결제 구분 명                   */
+                   , APRJ20036.STM_AUTH_CD                   stmAuthCd                         /* 결제 권한 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000007'
+                        AND    ZCOM99011.CD     = APRJ20036.STM_AUTH_CD
+                     )                                       stmAuthNm                         /* 결제 권한 명                   */
+                   , APRJ20036.STM_DEPT_ID                   stmDeptId                         /* 결제 부서 ID                   */
+                   , ZCOM99032.DEPT_NM                       stmDeptNm                         /* 결제 부서 명                   */
+                   , APRJ20036.STM_OP_CHRG_ID                stmOpChrgId                       /* 결제 업무 담당 ID              */
+                   , ASTM10020.OP_CHRG_NM                    stmOpChrgNm                       /* 결제 업무 담당 명              */
+                   , APRJ20036.STM_USER_ID                   stmUserId                         /* 결제 사용자 ID                 */
+                   , ZSTM99030.USER_NM                       stmUserNm                         /* 결제 사용자 명                 */
+
+                   , APRJ20053.SIGN_CL_CD                    signClCd                          /* 서명 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000010'
+                        AND    ZCOM99011.CD     = APRJ20053.SIGN_CL_CD
+                     )                                       signClNm                          /* 서명 구분 명                   */
+                   , APRJ20053.SIGN_DTM                      signDtm                           /* 서명 일시                      */
+                   , APRJ20053.BLCIN_VAL                     blcinVal                          /* 블록체인 값                    */
+                   , APRJ20053.SIGN_FILE_PATH                signFilePath                      /* 서명 파일 경로                 */
+                   , APRJ20053.SIGN_CTT                      signCtt                           /* 서명 내용                      */
+                   , APRJ20053.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20053.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20053.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20053.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20053.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20053.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20053.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20050
+            
+                   LEFT OUTER JOIN APRJ20030
+                   ON     APRJ20030.CO_ID      = APRJ20050.CO_ID
+                   AND    APRJ20030.OP_ID      = APRJ20050.OP_ID
+                   AND    APRJ20030.OP_SER_NUM = APRJ20050.OP_SER_NUM
+                   
+                   LEFT OUTER JOIN APRJ10020
+                   ON     APRJ10020.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ10020.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   
+                   LEFT OUTER JOIN ZCOM99030
+                   ON     ZCOM99030.USER_ID     = APRJ20050.USER_ID
+
+                   LEFT OUTER JOIN APRJ20036
+                   ON     APRJ20036.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ20036.OP_ID       = APRJ20050.OP_ID
+                   AND    APRJ20036.OP_SER_NUM  = APRJ20050.OP_SER_NUM
+                   AND    APRJ20036.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   AND    APRJ20036.USER_ID     = APRJ20050.USER_ID
+
+                   LEFT OUTER JOIN ZCOM99032
+                   ON     ZCOM99032.CO_ID      = APRJ20036.CO_ID
+                   AND    ZCOM99032.DEPT_ID    = APRJ20036.STM_DEPT_ID
+
+                   LEFT OUTER JOIN APRJ10020 ASTM10020
+                   ON     ASTM10020.CO_ID       = APRJ20036.CO_ID
+                   AND    ASTM10020.OP_CHRG_ID  = APRJ20036.STM_OP_CHRG_ID
+
+                   LEFT OUTER JOIN ZCOM99030 ZSTM99030
+                   ON     ZSTM99030.USER_ID     = APRJ20036.STM_USER_ID
+
+                   LEFT OUTER JOIN APRJ20053
+                   ON     APRJ20053.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ20053.OP_ID       = APRJ20050.OP_ID
+                   AND    APRJ20053.OP_SER_NUM  = APRJ20050.OP_SER_NUM
+                   AND    APRJ20053.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   AND    APRJ20053.USER_ID     = APRJ20050.USER_ID
+                   AND    APRJ20053.RES_SER_NUM = APRJ20050.RES_SER_NUM
+                   AND    APRJ20053.STM_SEQ_NUM = APRJ20036.STM_SEQ_NUM
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20053.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20053.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryUser" >
+        <![CDATA[
+            SELECT
+                     APRJ20050.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20050.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20050.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20050.OP_CHRG_ID                    opChrgId                          /* 업무 담당 ID                   */
+                   , APRJ10020.OP_CHRG_NM                    opChrgNm                          /* 업무 담당 명                   */
+                   , APRJ20050.USER_ID                       userId                            /* 사용자 ID                      */
+                   , ZCOM99030.USER_NM                       userNm                            /* 사용자 명                      */
+                   , APRJ20050.RES_SER_NUM                   resSerNum                         /* 응답 일련번호                  */
+                   , APRJ20050.RES_ST_CD                     resStCd                           /* 응답 상태 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000011'
+                        AND    ZCOM99011.CD     = APRJ20050.RES_ST_CD
+                     )                                       resStNm                           /* 응답 상태 명                   */
+                   , APRJ20050.RES_DT                        resDt                             /* 응답 일자                      */
+
+                   , APRJ20036.STM_SER_NUM                   stmSerNum                         /* 결제 일련번호                  */
+                   , MIN(APRJ20036.STM_SEQ_NUM)              stmSeqNum                         /* 결제 순번                      */
+                   , APRJ20036.STM_CL_CD                     stmClCd                           /* 결제 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000003'
+                        AND    ZCOM99011.CD     = APRJ20036.STM_CL_CD
+                     )                                       stmClNm                           /* 결제 구분 명                   */
+                   , APRJ20036.STM_AUTH_CD                   stmAuthCd                         /* 결제 권한 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000007'
+                        AND    ZCOM99011.CD     = APRJ20036.STM_AUTH_CD
+                     )                                       stmAuthNm                         /* 결제 권한 명                   */
+                   , APRJ20036.STM_DEPT_ID                   stmDeptId                         /* 결제 부서 ID                   */
+                   , ZCOM99032.DEPT_NM                       stmDeptNm                         /* 결제 부서 명                   */
+                   , APRJ20036.STM_OP_CHRG_ID                stmOpChrgId                       /* 결제 업무 담당 ID              */
+                   , ASTM10020.OP_CHRG_NM                    stmOpChrgNm                       /* 결제 업무 담당 명              */
+                   , APRJ20036.STM_USER_ID                   stmUserId                         /* 결제 사용자 ID                 */
+                   , ZSTM99030.USER_NM                       stmUserNm                         /* 결제 사용자 명                 */
+                   , ZSTM99030.MAIL_ADDR                     mailAddr                          /* 메일 주소                      */
+
+                   , APRJ20053.SIGN_CL_CD                    signClCd                          /* 서명 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000010'
+                        AND    ZCOM99011.CD     = APRJ20053.SIGN_CL_CD
+                     )                                       signClNm                          /* 서명 구분 명                   */
+                   , APRJ20053.SIGN_DTM                      signDtm                           /* 서명 일시                      */
+                   , APRJ20053.BLCIN_VAL                     blcinVal                          /* 블록체인 값                    */
+                   , APRJ20053.SIGN_FILE_PATH                signFilePath                      /* 서명 파일 경로                 */
+                   , APRJ20053.SIGN_CTT                      signCtt                           /* 서명 내용                      */
+                   , APRJ20053.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20053.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20053.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20053.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20053.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20053.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20053.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20050
+            
+                   LEFT OUTER JOIN APRJ20030
+                   ON     APRJ20030.CO_ID      = APRJ20050.CO_ID
+                   AND    APRJ20030.OP_ID      = APRJ20050.OP_ID
+                   AND    APRJ20030.OP_SER_NUM = APRJ20050.OP_SER_NUM
+                   
+                   LEFT OUTER JOIN APRJ10020
+                   ON     APRJ10020.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ10020.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   
+                   LEFT OUTER JOIN ZCOM99030
+                   ON     ZCOM99030.USER_ID     = APRJ20050.USER_ID
+
+                   LEFT OUTER JOIN APRJ20036
+                   ON     APRJ20036.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ20036.OP_ID       = APRJ20050.OP_ID
+                   AND    APRJ20036.OP_SER_NUM  = APRJ20050.OP_SER_NUM
+                   AND    APRJ20036.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   AND    APRJ20036.USER_ID     = APRJ20050.USER_ID
+
+                   LEFT OUTER JOIN ZCOM99032
+                   ON     ZCOM99032.CO_ID      = APRJ20036.CO_ID
+                   AND    ZCOM99032.DEPT_ID    = APRJ20036.STM_DEPT_ID
+
+                   LEFT OUTER JOIN APRJ10020 ASTM10020
+                   ON     ASTM10020.CO_ID       = APRJ20036.CO_ID
+                   AND    ASTM10020.OP_CHRG_ID  = APRJ20036.STM_OP_CHRG_ID
+
+                   LEFT OUTER JOIN ZCOM99030 ZSTM99030
+                   ON     ZSTM99030.USER_ID     = APRJ20036.STM_USER_ID
+
+                   LEFT OUTER JOIN APRJ20053
+                   ON     APRJ20053.CO_ID       = APRJ20050.CO_ID
+                   AND    APRJ20053.OP_ID       = APRJ20050.OP_ID
+                   AND    APRJ20053.OP_SER_NUM  = APRJ20050.OP_SER_NUM
+                   AND    APRJ20053.OP_CHRG_ID  = APRJ20050.OP_CHRG_ID
+                   AND    APRJ20053.USER_ID     = APRJ20050.USER_ID
+                   AND    APRJ20053.RES_SER_NUM = APRJ20050.RES_SER_NUM
+                   AND    APRJ20053.STM_SEQ_NUM = APRJ20036.STM_SEQ_NUM
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20053.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20053.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 프로젝트_응답결제리스트조회 -->
+    <select id="selectAPRJ20053_00" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20050.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20050.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20050.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20050.OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    APRJ20050.USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    APRJ20050.RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+            ORDER BY 
+                     APRJ20050.CO_ID                         
+                   , APRJ20050.OP_ID                         
+                   , APRJ20050.OP_SER_NUM                    
+                   , APRJ20050.OP_CHRG_ID                    
+                   , APRJ20050.USER_ID                       
+                   , APRJ20050.RES_SER_NUM                   
+                   , APRJ20036.STM_SEQ_NUM                   
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 프로젝트_응답결제리스트수조회 -->
+    <select id="selectAPRJ20053_01" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <![CDATA[
+            AND    APRJ20050.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20050.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20050.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20050.OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    APRJ20050.USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    APRJ20050.RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_응답결제조회 -->
+    <select id="selectAPRJ20053_02" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20053.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20053.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20053.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20053.OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    APRJ20053.USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    APRJ20053.RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+            AND    APRJ20053.STM_SEQ_NUM                    = #{stmSeqNum}                      /* 결제 순번                      */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_응답결제리스트조회 -->
+    <select id="selectAPRJ20053_03" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <![CDATA[
+            SELECT
+                     *
+            FROM   (
+        ]]>
+        <include refid="InlineViewQueryUser" />
+        <![CDATA[
+            AND    APRJ20050.CO_ID       = #{srchCoId}                           /* 업체 ID                        */
+            AND    APRJ20050.RES_ST_CD   = '3000'
+            AND    APRJ20053.SIGN_CL_CD IS NULL
+            GROUP BY
+                     APRJ20050.CO_ID
+                   , APRJ20050.OP_ID
+                   , APRJ20050.OP_SER_NUM
+                   , APRJ20050.OP_CHRG_ID
+                   , APRJ20050.USER_ID
+                   , APRJ20050.RES_SER_NUM
+            ORDER BY 
+                     APRJ20053.CO_ID                         
+                   , APRJ20053.OP_ID                         
+                   , APRJ20053.OP_SER_NUM                    
+                   , APRJ20053.OP_CHRG_ID                    
+                   , APRJ20053.USER_ID                       
+                   , APRJ20053.RES_SER_NUM
+                   ) APRJ20050
+            WHERE  1 = 1
+        ]]>
+        <include refid="WhereQuery" />
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 프로젝트_응답결제리스트수조회 -->
+    <select id="selectAPRJ20053_04" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+            SELECT
+                     *
+            FROM   (
+        ]]>
+        <include refid="InlineViewQueryUser"/>
+        <![CDATA[
+            AND    APRJ20050.CO_ID       = #{srchCoId}
+            AND    APRJ20050.RES_ST_CD   = '3000'
+            AND    APRJ20053.SIGN_CL_CD IS NULL
+            GROUP BY
+                     APRJ20050.CO_ID
+                   , APRJ20050.OP_ID
+                   , APRJ20050.OP_SER_NUM
+                   , APRJ20050.OP_CHRG_ID
+                   , APRJ20050.USER_ID
+                   , APRJ20050.RES_SER_NUM
+                   ) APRJ20050
+            WHERE  1 = 1
+        ]]>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+            WHERE  1 = 1
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_응답결제조회 -->
+    <select id="selectAPRJ20053_05" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20050.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20050.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20050.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20050.OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    APRJ20050.USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    APRJ20050.RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+            AND    APRJ20036.STM_SEQ_NUM                    = #{stmSeqNum}                      /* 결제 순번                      */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_응답결제등록 -->
+    <insert id="insertAPRJ20053_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20053
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , OP_CHRG_ID                        /* 업무 담당 ID                   */
+                   , USER_ID                           /* 사용자 ID                      */
+                   , RES_SER_NUM                       /* 응답 일련번호                  */
+                   , STM_SEQ_NUM                       /* 결제 순번                      */
+                   , SIGN_CL_CD                        /* 서명 구분 코드                 */
+                   , SIGN_DTM                          /* 서명 일시                      */
+                   , BLCIN_VAL                         /* 블록체인 값                    */
+                   , SIGN_FILE_PATH                    /* 서명 파일 경로                 */
+                   , SIGN_CTT                          /* 서명 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{opId}                           /* 업무 ID                        */
+                   , #{opSerNum}                       /* 업무 일련번호                  */
+                   , #{opChrgId}                       /* 업무 담당 ID                   */
+                   , #{userId}                         /* 사용자 ID                      */
+                   , #{resSerNum}                      /* 응답 일련번호                  */
+                   , #{stmSeqNum}                      /* 결제 순번                      */
+                   , #{signClCd}                       /* 서명 구분 코드                 */
+                   , #{signDtm}                        /* 서명 일시                      */
+                   , #{blcinVal}                       /* 블록체인 값                    */
+                   , #{signFilePath}                   /* 서명 파일 경로                 */
+                   , #{signCtt}                        /* 서명 내용                      */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_응답결제수정 -->
+    <update id="updateAPRJ20053_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            UPDATE APRJ20053 SET
+                     SIGN_CL_CD                     = #{signClCd}                       /* 서명 구분 코드                 */
+                   , SIGN_DTM                       = #{signDtm}                        /* 서명 일시                      */
+                   , BLCIN_VAL                      = #{blcinVal}                       /* 블록체인 값                    */
+                   , SIGN_FILE_PATH                 = #{signFilePath}                   /* 서명 파일 경로                 */
+                   , SIGN_CTT                       = #{signCtt}                        /* 서명 내용                      */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+            AND    STM_SEQ_NUM                    = #{stmSeqNum}                      /* 결제 순번                      */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_응답결제삭제 -->
+    <delete id="deleteAPRJ20053_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            DELETE FROM APRJ20053
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            AND    RES_SER_NUM                    = #{resSerNum}                      /* 응답 일련번호                  */
+            AND    STM_SEQ_NUM                    = #{stmSeqNum}                      /* 결제 순번                      */
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_응답결제삭제 -->
+    <delete id="deleteAPRJ20053_01" parameterType="Aprj20030Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ20053
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_응답결제삭제 -->
+    <delete id="deleteAPRJ20053_02" parameterType="Aprj20030Model" >
+        <![CDATA[
+            DELETE FROM APRJ20053
+            WHERE  1 = 1
+            AND    CO_ID = #{coId}
+        ]]>
+    </delete>
+
+</mapper>

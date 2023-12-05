@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj20011Query">
+
+
+
+    <sql id="WhereQuery" >
+
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ20011.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20011.FILE_SER_NUM                  fileSerNum                        /* 파일 일련번호                  */
+                   , APRJ20011.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20011.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20011.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20011.LGC_FILE_NM                   lgcFileNm                         /* 논리 파일 명                   */
+                   , APRJ20011.PSC_FILE_NM                   pscFileNm                         /* 물리 파일 명                   */
+                   , APRJ20011.FILE_PATH                     filePath                          /* 파일 경로                      */
+                   , APRJ20011.FILE_SIZE                     fileSize                          /* 파일 크기                      */
+                   , APRJ20011.DLOAD_CNT                     dloadCnt                          /* 다운로드 수                    */
+                   , APRJ20011.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20011.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20011.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20011.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20011.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20011.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20011.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20011
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20011.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20011.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 프로젝트_첨부파일리스트조회 -->
+    <select id="selectAPRJ20011_00" parameterType="Aprj20011Model" resultType="Aprj20011Model" >
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20011.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20011.PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+            ORDER BY 
+                     APRJ20011.CO_ID
+                   , APRJ20011.FILE_SER_NUM
+        ]]>
+    </select>
+
+    <!-- 프로젝트_첨부파일리스트수조회 -->
+    <select id="selectAPRJ20011_01" parameterType="Aprj20011Model" resultType="Aprj20011Model" >
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20011.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20011.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20011.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            ORDER BY 
+                     APRJ20011.CO_ID
+                   , APRJ20011.FILE_SER_NUM
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_첨부파일조회 -->
+    <select id="selectAPRJ20011_02" parameterType="Aprj20011Model" resultType="Aprj20011Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20011.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20011.FILE_SER_NUM                   = #{fileSerNum}                     /* 파일 일련번호                  */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_첨부파일등록 -->
+    <insert id="insertAPRJ20011_00" parameterType="Aprj20011Model" >
+        <selectKey order="BEFORE" keyProperty="fileSerNum" resultType="java.lang.String" >
+        <![CDATA[
+            SELECT IFNULL(MAX(FILE_SER_NUM), 0) + 1 fileSerNum
+            FROM   APRJ20011
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO APRJ20011
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , FILE_SER_NUM                      /* 파일 일련번호                  */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , LGC_FILE_NM                       /* 논리 파일 명                   */
+                   , PSC_FILE_NM                       /* 물리 파일 명                   */
+                   , FILE_PATH                         /* 파일 경로                      */
+                   , FILE_SIZE                         /* 파일 크기                      */
+                   , DLOAD_CNT                         /* 다운로드 수                    */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{fileSerNum}                     /* 파일 일련번호                  */
+                   , #{prjId}                          /* 프로젝트 ID                    */
+                   , #{opId}                           /* 업무 ID                        */
+                   , #{opSerNum}                       /* 업무 일련번호                  */
+                   , #{lgcFileNm}                      /* 논리 파일 명                   */
+                   , #{pscFileNm}                      /* 물리 파일 명                   */
+                   , #{filePath}                       /* 파일 경로                      */
+                   , #{fileSize}                       /* 파일 크기                      */
+                   , #{dloadCnt}                       /* 다운로드 수                    */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_첨부파일수정 -->
+    <update id="updateAPRJ20011_00" parameterType="Aprj20011Model" >
+        <![CDATA[
+            UPDATE APRJ20011 SET
+                     PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+                   , OP_ID                          = #{opId}                           /* 업무 일련번호                  */
+                   , OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+                   , LGC_FILE_NM                    = #{lgcFileNm}                      /* 논리 파일 명                   */
+                   , PSC_FILE_NM                    = #{pscFileNm}                      /* 물리 파일 명                   */
+                   , FILE_PATH                      = #{filePath}                       /* 파일 경로                      */
+                   , FILE_SIZE                      = #{fileSize}                       /* 파일 크기                      */
+                   , DLOAD_CNT                      = #{dloadCnt}                       /* 다운로드 수                    */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FILE_SER_NUM                   = #{fileSerNum}                     /* 파일 일련번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_첨부파일삭제 -->
+    <delete id="deleteAPRJ20011_00" parameterType="Aprj20011Model" >
+        <![CDATA[
+            DELETE FROM APRJ20011
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FILE_SER_NUM                   = #{fileSerNum}                     /* 파일 일련번호                  */
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_첨부파일삭제 -->
+    <delete id="deleteAPRJ20011_01" parameterType="Aprj20011Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ20011
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_첨부파일삭제 -->
+    <delete id="deleteAPRJ20011_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ20011
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

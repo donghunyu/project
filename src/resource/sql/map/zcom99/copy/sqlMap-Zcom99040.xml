@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Zcom99040Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchTmpLoginId)">
+            AND    ZCOM99040.TMP_LOGIN_ID                LIKE CONCAT('%', #{srchTmpLoginId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserId)">
+            AND    ZCOM99040.USER_ID                     LIKE CONCAT('%', #{srchUserId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserNm)">
+            AND    ZCOM99030.USER_NM                     LIKE CONCAT('%', #{srchUserNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchScrUrl)">
+            AND    ZCOM99040.SCR_URL                        = #{srchScrUrl}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     ZCOM99040.TMP_LOGIN_ID                  tmpLoginId                        /* 임시 로그인 ID                 */
+                   , ZCOM99040.USER_ID                       userId                            /* 사용자 ID                      */
+                   , ZCOM99030.USER_NM                       userNm                            /* 사용자 ID                      */
+                   , ZCOM99040.SCR_URL                       scrUrl                            /* 화면 URL                       */
+                   , ZCOM99040.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99040.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99040.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , ZCOM99040.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , ZCOM99040.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , ZCOM99040.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+
+            FROM   ZCOM99040
+
+                   LEFT OUTER JOIN ZCOM99030
+                   ON     ZCOM99030.USER_ID = ZCOM99040.USER_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = ZCOM99040.RGST_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_임시로그인리스트조회 -->
+    <select id="selectZCOM99040_00" parameterType="Zcom99040Model" resultType="Zcom99040Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99040.RGST_DTM DESC                  
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 관리자_임시로그인리스트수조회 -->
+    <select id="selectZCOM99040_01" parameterType="Zcom99040Model" resultType="Zcom99040Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_임시로그인조회 -->
+    <select id="selectZCOM99040_02" parameterType="Zcom99040Model" resultType="Zcom99040Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99040.TMP_LOGIN_ID                   = #{tmpLoginId}                     /* 임시 로그인 ID                 */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_임시로그인등록 -->
+    <insert id="insertZCOM99040_00" parameterType="Zcom99040Model" >
+        <![CDATA[
+            INSERT INTO ZCOM99040
+            (
+                     TMP_LOGIN_ID                      /* 임시 로그인 ID                 */
+                   , USER_ID                           /* 사용자 ID                      */
+                   , SCR_URL                           /* 화면 URL                       */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+            ) VALUES (
+                     #{tmpLoginId}                     /* 임시 로그인 ID                 */
+                   , #{userId}                         /* 사용자 ID                      */
+                   , #{scrUrl}                         /* 화면 URL                       */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_임시로그인수정 -->
+    <update id="updateZCOM99040_00" parameterType="Zcom99040Model" >
+        <![CDATA[
+            UPDATE ZCOM99040 SET
+                     USER_ID                        = #{userId}                         /* 사용자 ID                      */
+                   , SCR_URL                        = #{scrUrl}                         /* 화면 URL                       */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    TMP_LOGIN_ID                   = #{tmpLoginId}                     /* 임시 로그인 ID                 */
+        ]]>
+    </update>
+
+
+    <!-- 관리자_임시로그인삭제 -->
+    <delete id="deleteZCOM99040_00" parameterType="Zcom99040Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99040
+            WHERE  1 = 1
+            AND    TMP_LOGIN_ID                   = #{tmpLoginId}                     /* 임시 로그인 ID                 */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_임시로그인삭제 -->
+    <delete id="deleteZCOM99040_01" parameterType="Zcom99040Model" >
+        <![CDATA[
+            TRUNCATE TABLE ZCOM99040
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_임시로그인삭제 -->
+    <delete id="deleteZCOM99040_10" parameterType="Zcom99030Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99040
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

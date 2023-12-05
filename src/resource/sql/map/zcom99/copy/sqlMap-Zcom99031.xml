@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Zcom99031Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    ZCOM99031.CO_ID                       LIKE CONCAT('%', #{srchCoId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoNm)">
+            AND    ZCOM99031.CO_NM                       LIKE CONCAT('%', #{srchCoNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoBizNum)">
+            AND    ZCOM99031.CO_BIZ_NUM                  LIKE CONCAT('%', #{srchCoBizNum}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoPhonNum)">
+            AND    ZCOM99031.CO_PHON_NUM                    = #{srchCoPhonNum}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoAddr)">
+            AND    ZCOM99031.CO_ADDR                        = #{srchCoAddr}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoCtt)">
+            AND    ZCOM99031.CO_CTT                         = #{srchCoCtt}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     ZCOM99031.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , ZCOM99031.CO_BIZ_NUM                    coBizNum                          /* 업체 사업자 번호               */
+                   , ZCOM99031.CO_PHON_NUM                   coPhonNum                         /* 업체 전화 번호                 */
+                   , ZCOM99031.CO_ADDR                       coAddr                            /* 업체 주소                      */
+                   , ZCOM99031.CO_CTT                        coCtt                             /* 업체 내용                      */
+                   , ZCOM99031.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99031.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99031.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , ZCOM99031.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , ZCOM99031.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , ZCOM99031.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , ZCOM99031.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , ZCOM99031.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , ZCOM99031.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   ZCOM99031
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = ZCOM99031.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = ZCOM99031.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_업체리스트조회 -->
+    <select id="selectZCOM99031_00" parameterType="Zcom99031Model" resultType="Zcom99031Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99031.CO_ID                         
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 관리자_업체리스트수조회 -->
+    <select id="selectZCOM99031_01" parameterType="Zcom99031Model" resultType="Zcom99031Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_업체조회 -->
+    <select id="selectZCOM99031_02" parameterType="Zcom99031Model" resultType="Zcom99031Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99031.CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_업체등록 -->
+    <insert id="insertZCOM99031_00" parameterType="Zcom99031Model" >
+        <![CDATA[
+            INSERT INTO ZCOM99031
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , CO_NM                             /* 업체 명                        */
+                   , CO_BIZ_NUM                        /* 업체 사업자 번호               */
+                   , CO_PHON_NUM                       /* 업체 전화 번호                 */
+                   , CO_ADDR                           /* 업체 주소                      */
+                   , CO_CTT                            /* 업체 내용                      */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{coNm}                           /* 업체 명                        */
+                   , #{coBizNum}                       /* 업체 사업자 번호               */
+                   , #{coPhonNum}                      /* 업체 전화 번호                 */
+                   , #{coAddr}                         /* 업체 주소                      */
+                   , #{coCtt}                          /* 업체 내용                      */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_업체수정 -->
+    <update id="updateZCOM99031_00" parameterType="Zcom99031Model" >
+        <![CDATA[
+            UPDATE ZCOM99031 SET
+                     CO_NM                          = #{coNm}                           /* 업체 명                        */
+                   , CO_BIZ_NUM                     = #{coBizNum}                       /* 업체 사업자 번호               */
+                   , CO_PHON_NUM                    = #{coPhonNum}                      /* 업체 전화 번호                 */
+                   , CO_ADDR                        = #{coAddr}                         /* 업체 주소                      */
+                   , CO_CTT                         = #{coCtt}                          /* 업체 내용                      */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </update>
+
+
+    <!-- 관리자_업체삭제 -->
+    <delete id="deleteZCOM99031_00" parameterType="Zcom99031Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99031
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_업체삭제 -->
+    <delete id="deleteZCOM99031_01" parameterType="Zcom99031Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99031
+            WHERE  1 = 1
+            AND    CO_ID <> '0000000000'                           /* 관리자 업체 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_업체삭제 -->
+    <delete id="deleteZCOM99031_10" parameterType="Zcom99030Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99031
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+    
+    
+</mapper>

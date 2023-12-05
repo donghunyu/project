@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj10051Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ10051.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchFormId)">
+            AND    APRJ10051.FORM_ID                        = #{srchFormId}    
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ10051.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ10051.FORM_ID                       formId                            /* 양식 ID                        */
+                   , APRJ10051.REQ_SER_NUM                   reqSerNum                         /* 요청 일령번호                  */
+                   , APRJ10051.REQ_SEQ_NUM                   reqSeqNum                         /* 요청 순번                      */
+                   , APRJ10051.REQ_TYP_CD                    reqTypCd                          /* 요청 종류 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000005'
+                        AND    ZCOM99011.CD     = APRJ10051.REQ_TYP_CD
+                     )                                       reqTypNm                          /* 요청 종류 명                   */
+                     
+                   , APRJ10051.REQ_CTT                       reqCtt                            /* 요청 내용                      */
+                   , APRJ10051.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10052.ITM_SER_NUM                   itmSerNum                         /* 항목 ID                        */
+                   , APRJ10052.ITM_VAL                       itmVal                            /* 항목 값                        */
+                   , (
+                       SELECT COUNT(*) 
+                       FROM APRJ10052 
+                       WHERE 1 = 1
+                       AND    APRJ10052.CO_ID        = APRJ10051.CO_ID
+                       AND    APRJ10052.FORM_ID      = APRJ10051.FORM_ID     
+                       AND    APRJ10052.REQ_SER_NUM  = APRJ10051.REQ_SER_NUM
+                     )                                       itmCnt
+                     
+                   , APRJ10051.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10051.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10051.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10051.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10051.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10051.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10051
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ10051.CO_ID
+
+                   LEFT OUTER JOIN APRJ10052
+                   ON     APRJ10052.CO_ID        = APRJ10051.CO_ID
+                   AND    APRJ10052.FORM_ID      = APRJ10051.FORM_ID     
+                   AND    APRJ10052.REQ_SER_NUM  = APRJ10051.REQ_SER_NUM
+                   
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10051.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10051.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 설정_양식요청리스트조회 -->
+    <select id="selectAPRJ10051_00" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ10051.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10051.FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            ORDER BY 
+                     APRJ10051.CO_ID                         
+                   , APRJ10051.FORM_ID                       
+                   , APRJ10051.REQ_SEQ_NUM                   
+        ]]>
+    </select>
+
+    <!-- 설정_양식요청리스트수조회 -->
+    <select id="selectAPRJ10051_01" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 설정_양식요청조회 -->
+    <select id="selectAPRJ10051_02" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <![CDATA[
+            SELECT
+                     APRJ10051.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ10051.FORM_ID                       formId                            /* 양식 ID                        */
+                   , APRJ10051.REQ_SER_NUM                   reqSerNum                         /* 요청 일령번호                  */
+                   , APRJ10051.REQ_SEQ_NUM                   reqSeqNum                         /* 요청 순번                      */
+                   , APRJ10051.REQ_TYP_CD                    reqTypCd                          /* 요청 종류 코드                 */
+                   , APRJ10051.REQ_CTT                       reqCtt                            /* 요청 내용                      */
+                   , APRJ10051.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10051.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10051.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10051.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10051.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10051.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10051.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10051
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10051.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10051.UPDT_ID
+
+            WHERE  1 = 1
+            AND    APRJ10051.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10051.FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    APRJ10051.REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 일령번호                  */
+        ]]>
+    </select>
+
+
+    <!-- 설정_양식요청등록 -->
+    <insert id="insertAPRJ10051_00" parameterType="Aprj10050Model" >
+        <selectKey order="BEFORE" keyProperty="reqSerNum" resultType="java.lang.String" >
+        <![CDATA[
+            SELECT  IFNULL(MAX(REQ_SER_NUM), 0) + 1 reqSerNum
+            FROM    APRJ10051
+            WHERE   1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+        ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO APRJ10051
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , FORM_ID                           /* 양식 ID                        */
+                   , REQ_SER_NUM                       /* 요청 일령번호                  */
+                   , REQ_SEQ_NUM                       /* 요청 순번                      */
+                   , REQ_TYP_CD                        /* 요청 종류 코드                 */
+                   , REQ_CTT                           /* 요청 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{formId}                         /* 양식 ID                        */
+                   , #{reqSerNum}                      /* 요청 일령번호                  */
+                   , #{reqSeqNum}                      /* 요청 순번                      */
+                   , #{reqTypCd}                       /* 요청 종류 코드                 */
+                   , #{reqCtt}                         /* 요청 내용                      */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 설정_양식요청수정 -->
+    <update id="updateAPRJ10051_00" parameterType="Aprj10050Model" >
+        <![CDATA[
+            UPDATE APRJ10051 SET
+                     REQ_SEQ_NUM                    = #{reqSeqNum}                      /* 요청 순번                      */
+                   , REQ_TYP_CD                     = #{reqTypCd}                       /* 요청 종류 코드                 */
+                   , REQ_CTT                        = #{reqCtt}                         /* 요청 내용                      */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 일령번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 설정_양식요청삭제 -->
+    <delete id="deleteAPRJ10051_00" parameterType="Aprj10050Model" >
+        <![CDATA[
+            DELETE FROM APRJ10051
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 일령번호                  */
+        ]]>
+    </delete>
+
+</mapper>

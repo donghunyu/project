@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj20010Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ20010.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrjId)">
+            AND    APRJ20010.PRJ_ID                      LIKE CONCAT('%', #{srchPrjId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrjNm)">
+            AND    APRJ20010.PRJ_NM                      LIKE CONCAT('%', #{srchPrjNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrjVer)">
+            AND    APRJ20010.PRJ_VER                        = #{srchPrjVer}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrjCtt)">
+            AND    APRJ20010.PRJ_CTT                        = #{srchPrjCtt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchProcStCd)">
+            AND    APRJ20010.PROC_ST_CD                     = #{srchProcStCd}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ20010.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ20010.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20010.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20010.PRJ_VER                       prjVer                            /* 프로젝트 버전                  */
+                   , APRJ20010.PRJ_CTT                       prjCtt                            /* 프로젝트 내용                  */
+                   , APRJ20010.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20010.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20010.PROC_ST_CD                    procStCd                          /* 진행 상태 코드                 */
+                   , APRJ20010.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20010.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20010.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20010.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20010.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20010.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20010.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20010
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ20010.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20010.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20010.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryExcel" >
+        <![CDATA[
+            SELECT
+                     APRJ20010.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ20010.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20010.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20010.PRJ_VER                       prjVer                            /* 프로젝트 버전                  */
+                   , APRJ20010.PRJ_CTT                       prjCtt                            /* 프로젝트 내용                  */
+                   , APRJ20010.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20010.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20010.PROC_ST_CD                    procStCd                          /* 진행 상태 코드                 */
+                   , APRJ20010.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20020.CTRL_NUM                      ctrlNum                           /* 통제 번호                      */
+                   , APRJ20020.CTRL_NM                       ctrlNm                            /* 통제 명                        */
+                   , APRJ20020.CTRL_CTT                      ctrlCtt                           /* 통제 내용                      */
+
+                   , APRJ20021.AST_CL_ID                     astClId                           /* 자산 구분 ID                   */
+                   , APRJ10010.AST_CL_NM                     astClNm                           /* 자산 구분 명                   */
+                   
+                   , APRJ20010.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20010.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20010.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20010.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20010.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20010.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20010
+
+                   LEFT OUTER JOIN APRJ20020
+                   ON     APRJ20020.CO_ID     = APRJ20010.CO_ID
+                   AND    APRJ20020.PRJ_ID    = APRJ20010.PRJ_ID
+
+                   LEFT OUTER JOIN APRJ20021
+                   ON     APRJ20021.CO_ID     = APRJ20020.CO_ID
+                   AND    APRJ20021.PRJ_ID    = APRJ20020.PRJ_ID
+                   AND    APRJ20021.CTRL_NUM  = APRJ20020.CTRL_NUM
+
+                   LEFT OUTER JOIN APRJ10010
+                   ON     APRJ10010.CO_ID     = APRJ20021.CO_ID
+                   AND    APRJ10010.AST_CL_ID = APRJ20021.AST_CL_ID
+                   
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ20010.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20010.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20010.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 프로젝트_프로젝트리스트조회 -->
+    <select id="selectAPRJ20010_00" parameterType="Aprj20010Model" resultType="Aprj20010Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ20010.CO_ID                         
+                   , APRJ20010.PRJ_ID                   
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 프로젝트_프로젝트리스트수조회 -->
+    <select id="selectAPRJ20010_01" parameterType="Aprj20010Model" resultType="Aprj20010Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_프로젝트조회 -->
+    <select id="selectAPRJ20010_02" parameterType="Aprj20010Model" resultType="Aprj20010Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20010.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20010.PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_프로젝트리스트조회 -->
+    <select id="selectAPRJ20010_10" parameterType="Aprj20010Model" resultType="java.util.Map" >
+        <include refid="InlineViewQueryExcel" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ20010.CO_ID                         
+                   , APRJ20010.PRJ_ID                   
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_프로젝트등록 -->
+    <insert id="insertAPRJ20010_00" parameterType="Aprj20010Model" >
+        <![CDATA[
+            INSERT INTO APRJ20010
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   , PRJ_VER                           /* 프로젝트 버전                  */
+                   , PRJ_CTT                           /* 프로젝트 내용                  */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , PROC_ST_CD                        /* 진행 상태 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{prjId}                          /* 프로젝트 ID                    */
+                   , #{prjNm}                          /* 프로젝트 명                    */
+                   , #{prjVer}                         /* 프로젝트 버전                  */
+                   , #{prjCtt}                         /* 프로젝트 내용                  */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{procStCd}                       /* 진행 상태 코드                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_프로젝트등록 -->
+    <insert id="insertAPRJ20010_10" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20010
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   , PRJ_VER                           /* 프로젝트 버전                  */
+                   , PRJ_CTT                           /* 프로젝트 내용                  */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , PROC_ST_CD                        /* 진행 상태 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   , PRJ_VER                           /* 프로젝트 버전                  */
+                   , PRJ_CTT                           /* 프로젝트 내용                  */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , PROC_ST_CD                        /* 진행 상태 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+
+            FROM   APRJ20010
+            WHERE  1 = 1
+            AND    APRJ20010.CO_ID                          = '0000000000'                      /* 업체 ID                        */
+            AND    APRJ20010.PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_프로젝트수정 -->
+    <update id="updateAPRJ20010_00" parameterType="Aprj20010Model" >
+        <![CDATA[
+            UPDATE APRJ20010 SET
+                     PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+                   , PRJ_NM                         = #{prjNm}                          /* 프로젝트 명                    */
+                   , PRJ_VER                        = #{prjVer}                         /* 프로젝트 버전                  */
+                   , PRJ_CTT                        = #{prjCtt}                         /* 프로젝트 내용                  */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , PROC_ST_CD                     = #{procStCd}                       /* 진행 상태 코드                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    PRJ_ID                         = #{prjId}                          /* 프로젝트 일련번호              */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_프로젝트삭제 -->
+    <delete id="deleteAPRJ20010_00" parameterType="Aprj20010Model" >
+        <![CDATA[
+            DELETE FROM APRJ20010
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    PRJ_ID                         = #{prjId}                          /* 프로젝트 일련번호              */
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_프로젝트삭제 -->
+    <delete id="deleteAPRJ20010_01" parameterType="Aprj20010Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ20010
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_프로젝트삭제 -->
+    <delete id="deleteAPRJ20010_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ20010
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

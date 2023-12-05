@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Zcom99021Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchSerNum)">
+            AND    ZCOM99021.SER_NUM                        = #{srchSerNum}
+        </if>
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchMenuAuthCd)">
+            AND    ZCOM99021.MENU_AUTH_CD                   = #{srchMenuAuthCd}
+        </if>
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchUserAuthCd)">
+            AND    ZCOM99021.USER_AUTH_CD                   = #{srchUserAuthCd}
+        </if>
+        <if test="@project.spring.app.zcom.lib.object.ZcomMyBatis@isNotEmpty(srchUserNum)">
+            AND    ZCOM99021.USER_NUM                       = #{srchUserNum}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     ZCOM99021.GRP_CO_ID                     grpCoId                           /* 그룹사 ID                      */
+                   , ZCOM99021.SER_NUM                       serNum                            /* 일련번호                       */
+                   , ZCOM99021.MENU_AUTH_CD                  menuAuthCd                        /* 메뉴 권한 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM FROM ZCOM99011
+                        WHERE  ZCOM99011.GRP_CD    = ''
+                        AND    ZCOM99011.CD        = ZCOM99021.MENU_AUTH_CD
+                     )                                       menuAuthCdNm                      /* 메뉴 권한 코드명               */
+                   , ZCOM99021.USER_AUTH_CD                  userAuthCd                        /* 사용자 권한 코드               */
+                   , (
+                        SELECT ZCOM99011.CD_NM FROM ZCOM99011
+                        WHERE  ZCOM99011.GRP_CD    = ''
+                        AND    ZCOM99011.CD        = ZCOM99021.USER_AUTH_CD
+                     )                                       userAuthCdNm                      /* 사용자 권한 코드명             */
+                   , ZCOM99021.USER_NUM                      userNum                           /* 사용자 번호                    */
+                   , ZCOM99021.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , ZCOM99021.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , ZCOM99021.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , GRP      .GRP_CO_NM                     grpCoNm                           /* 그룹사명                       */
+                   , ZCOM99021.REG_USER_NUM                  regUserNum                        /* 등록 ID                        */
+                   , UPD      .USER_NM                       regNm                             /* 등록 명                        */
+                   , ZCOM99021.REG_IP                        regIp                             /* 등록 IP                        */
+                   , ZCOM99021.REG_DTM                       regDtm                            /* 등록 일시                      */
+                   , ZCOM99021.UPD_USER_NUM                  updUserNum                        /* 수정 ID                        */
+                   , UPD      .USER_NM                       updNm                             /* 수정 명                        */
+                   , ZCOM99021.UPD_IP                        updIp                             /* 수정 IP                        */
+                   , ZCOM99021.UPD_DTM                       updDtm                            /* 수정 일시                      */
+
+            FROM   ZCOM99021
+
+                   LEFT OUTER JOIN ZCOM99000 GRP
+                   ON     GRP.GRP_CO_ID = ZCOM99021.GRP_CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 REG
+                   ON     REG.GRP_CO_ID = ZCOM99021.GRP_CO_ID
+                   AND    REG.USER_NUM  = ZCOM99021.REG_USER_NUM
+
+                   LEFT OUTER JOIN ZCOM99030 UPD
+                   ON     UPD.GRP_CO_ID = ZCOM99021.GRP_CO_ID
+                   AND    UPD.USER_NUM  = ZCOM99021.UPD_USER_NUM
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_메뉴권한리스트조회 -->
+    <select id="selectZCOM99021_00" parameterType="Zcom99021Model" resultType="Zcom99021Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     ZCOM99021.GRP_CO_ID                     
+                   , ZCOM99021.SER_NUM                       
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 관리자_메뉴권한리스트수조회 -->
+    <select id="selectZCOM99021_01" parameterType="Zcom99021Model" resultType="Zcom99021Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_메뉴권한조회 -->
+    <select id="selectZCOM99021_02" parameterType="Zcom99021Model" resultType="Zcom99021Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99021.GRP_CO_ID                      = #{grpCoId}                        /* 그룹사 ID                      */
+            AND    ZCOM99021.SER_NUM                        = #{serNum}                         /* 일련번호                       */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_메뉴권한등록 -->
+    <insert id="insertZCOM99021_00" parameterType="Zcom99021Model" >
+        <![CDATA[
+            INSERT INTO ZCOM99021
+            (
+                     GRP_CO_ID                         /* 그룹사 ID                      */
+                   , SER_NUM                           /* 일련번호                       */
+                   , MENU_AUTH_CD                      /* 메뉴 권한 코드                 */
+                   , USER_AUTH_CD                      /* 사용자 권한 코드               */
+                   , USER_NUM                          /* 사용자 번호                    */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , REG_USER_NUM                      /* 등록 사용자 번호               */
+                   , REG_IP                            /* 등록 IP                        */
+                   , REG_DTM                           /* 등록 일시                      */
+                   , UPD_USER_NUM                      /* 수정 사용자 번호               */
+                   , UPD_IP                            /* 수정 IP                        */
+                   , UPD_DTM                           /* 수정 일시                      */
+            ) VALUES (
+                     #{grpCoId}                        /* 그룹사 ID                      */
+                   , #{serNum}                         /* 일련번호                       */
+                   , #{menuAuthCd}                     /* 메뉴 권한 코드                 */
+                   , #{userAuthCd}                     /* 사용자 권한 코드               */
+                   , #{userNum}                        /* 사용자 번호                    */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{regUserNum}                     /* 등록 사용자 번호               */
+                   , #{regIp}                          /* 등록 IP                        */
+                   , #{regDtm}                         /* 등록 일시                      */
+                   , #{updUserNum}                     /* 수정 사용자 번호               */
+                   , #{updIp}                          /* 수정 IP                        */
+                   , #{updDtm}                         /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_메뉴권한수정 -->
+    <update id="updateZCOM99021_00" parameterType="Zcom99021Model" >
+        <![CDATA[
+            UPDATE ZCOM99021 SET
+                     MENU_AUTH_CD                   = #{menuAuthCd}                     /* 메뉴 권한 코드                 */
+                   , USER_AUTH_CD                   = #{userAuthCd}                     /* 사용자 권한 코드               */
+                   , USER_NUM                       = #{userNum}                        /* 사용자 번호                    */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPD_USER_NUM                   = #{updUserNum}                     /* 수정 사용자 번호               */
+                   , UPD_IP                         = #{updIp}                          /* 수정 IP                        */
+                   , UPD_DTM                        = #{updDtm}                         /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    GRP_CO_ID                      = #{grpCoId}                        /* 그룹사 ID                      */
+            AND    SER_NUM                        = #{serNum}                         /* 일련번호                       */
+        ]]>
+    </update>
+
+
+    <!-- 관리자_메뉴권한삭제 -->
+    <delete id="deleteZCOM99021_00" parameterType="Zcom99021Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99021
+            WHERE  1 = 1
+            AND    GRP_CO_ID                      = #{grpCoId}                        /* 그룹사 ID                      */
+            AND    SER_NUM                        = #{serNum}                         /* 일련번호                       */
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_메뉴권한삭제 -->
+    <delete id="deleteZCOM99021_01" parameterType="Zcom99021Model" >
+        <![CDATA[
+            TRUNCATE TABLE ZCOM99021
+        ]]>
+    </delete>
+
+
+    <!-- 관리자_메뉴권한삭제 -->
+    <delete id="deleteZCOM99021_02" parameterType="Zcom99021Model" >
+        <![CDATA[
+            DELETE FROM ZCOM99021
+            WHERE  1 = 1
+            AND    CO_ID = #{coId}
+        ]]>
+    </delete>
+
+</mapper>

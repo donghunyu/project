@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj20030Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ20030.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpId)">
+            AND    APRJ20030.OP_ID                          = #{srchOpId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpSerNum)">
+            AND    APRJ20030.OP_SER_NUM                     = #{srchOpSerNum}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpSeqNum)">
+            AND    APRJ20030.OP_SEQ_NUM                     = #{srchOpSeqNum}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpNm)">
+            AND    APRJ20030.OP_NM                          = #{srchOpNm}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpCtt)">
+            AND    APRJ20030.OP_CTT                         = #{srchOpCtt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCyclId)">
+            AND    APRJ20030.CYCL_ID                        = #{srchCyclId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStmId)">
+            AND    APRJ20030.STM_ID                         = #{srchStmId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchTranDt)">
+            AND    APRJ20030.TRAN_DT                        = #{srchTranDt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchTranStCd)">
+            AND    APRJ20030.TRAN_ST_CD                     = #{srchTranStCd}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrjId)">
+            AND    APRJ20030.PRJ_ID                         = #{srchPrjId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCtrlNum)">
+            AND    APRJ20030.CTRL_NUM                       = #{srchCtrlNum}
+        </if>
+        
+        
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpChrgId)">
+            AND    APRJ20034.OP_CHRG_ID                     = #{srchOpChrgId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchOpChrgNm)">
+            AND    APRJ10020.OP_CHRG_NM                  LIKE CONCAT('%', #{srchOpChrgNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserId)">
+            AND    APRJ20034.USER_ID                        = #{srchUserId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchUserNm)">
+            AND    ZCOM99030.USER_NM                     LIKE CONCAT('%', #{srchUserNm}, '%')
+        </if>
+        
+        
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchResStCd)">
+            AND    APRJ20034.RES_ST_CD                      = #{srchResStCd}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchSignClCd)">
+            AND    IFNULL(APRJ20034.SIGN_CL_CD, '0000')     = #{srchSignClCd}
+        </if>
+        
+        
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ20030.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ20030.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20030.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20030.OP_CTT                        opCtt                             /* 업무 내용                      */
+                   , APRJ20030.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20030.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20030.DRFT_DEPT_ID                  drftDeptId                        /* 기안 부서 ID                   */
+                   , APRJ20030.DRFT_DEPT_NM                  drftDeptNm                        /* 기안 부서 명                   */
+                   , APRJ20030.DRFT_OP_CHRG_ID               drftOpChrgId                      /* 기안 업무 담당 ID              */
+                   , APRJ20030.DRFT_OP_CHRG_NM               drftOpChrgNm                      /* 기안 업무 담당 명              */
+                   , APRJ20030.DRFT_USER_ID                  drftUserId                        /* 기안 사용자 ID                 */
+                   , APRJ20030.DRFT_USER_NM                  drftUserNm                        /* 기안 사용자 명                 */
+                   , APRJ20030.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ10040.CYCL_NM                       cyclNm                            /* 주기 명                        */
+                   , APRJ20030.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ20030.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000004'
+                        AND    ZCOM99011.CD     = APRJ20030.CYCL_CL_CD
+                     )                                       cyclClNm                          /* 주기 구분 명                   */
+                   , APRJ20030.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ20030.STM_ID                        stmId                             /* 결제 ID                        */
+                   , APRJ10030.STM_NM                        stmNm                             /* 결제 명                        */
+                   , APRJ20030.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20030.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20030.TRAN_DT                       tranDt                            /* 처리 일자                      */
+                   , APRJ20030.TRAN_ST_CD                    tranStCd                          /* 처리 상태 코드                 */
+                   , APRJ20030.AUTO_CL_CD                    autoClCd                          /* 자동 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000013'
+                        AND    ZCOM99011.CD     = APRJ20030.AUTO_CL_CD
+                     )                                       autoClNm                          /* 자동 구분 명                   */
+                   , APRJ20030.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20030.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20030.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20030.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20030.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20030.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20030.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20030
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ20030.CO_ID
+
+                   LEFT OUTER JOIN APRJ10040
+                   ON     APRJ10040.CO_ID        = APRJ20030.CO_ID
+                   AND    APRJ10040.CYCL_ID      = APRJ20030.CYCL_ID
+
+                   LEFT OUTER JOIN APRJ10030
+                   ON     APRJ10030.CO_ID        = APRJ20030.CO_ID
+                   AND    APRJ10030.STM_ID       = APRJ20030.STM_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20030.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20030.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryExcel" >
+        <![CDATA[
+            SELECT
+                     APRJ20030.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ20030.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20030.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20030.OP_CTT                        opCtt                             /* 업무 내용                      */
+                   , APRJ20030.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20030.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20030.DRFT_DEPT_ID                  drftDeptId                        /* 기안 부서 ID                   */
+                   , APRJ20030.DRFT_DEPT_NM                  drftDeptNm                        /* 기안 부서 명                   */
+                   , APRJ20030.DRFT_OP_CHRG_ID               drftOpChrgId                      /* 기안 업무 담당 ID              */
+                   , APRJ20030.DRFT_OP_CHRG_NM               drftOpChrgNm                      /* 기안 업무 담당 명              */
+                   , APRJ20030.DRFT_USER_ID                  drftUserId                        /* 기안 사용자 ID                 */
+                   , APRJ20030.DRFT_USER_NM                  drftUserNm                        /* 기안 사용자 명                 */
+                   , APRJ20030.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ10040.CYCL_NM                       cyclNm                            /* 주기 명                        */
+                   , APRJ20030.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ20030.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000004'
+                        AND    ZCOM99011.CD     = APRJ20030.CYCL_CL_CD
+                     )                                       cyclClNm                          /* 주기 구분 명                   */
+                   , APRJ20030.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ20030.STM_ID                        stmId                             /* 결제 ID                        */
+                   , APRJ10030.STM_NM                        stmNm                             /* 결제 명                        */
+                   , APRJ20030.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20030.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20030.TRAN_DT                       tranDt                            /* 처리 일자                      */
+                   , APRJ20030.TRAN_ST_CD                    tranStCd                          /* 처리 상태 코드                 */
+                   , APRJ20030.AUTO_CL_CD                    autoClCd                          /* 자동 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000013'
+                        AND    ZCOM99011.CD     = APRJ20030.AUTO_CL_CD
+                     )                                       autoClNm                          /* 자동 구분 명                   */
+                   , APRJ20030.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20040.REQ_SER_NUM                   reqSerNum                         /* 요청 일련번호                  */
+                   , APRJ20040.REQ_SEQ_NUM                   reqSeqNum                         /* 요청 순번                      */
+                   , APRJ20040.REQ_TYP_CD                    reqTypCd                          /* 요청 종류 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000005'
+                        AND    ZCOM99011.CD     = APRJ20040.REQ_TYP_CD
+                     )                                       reqTypNm                          /* 요청 종류 명                   */
+                   , APRJ20040.REQ_CTT                       reqCtt                            /* 요청 내용                      */
+
+                   , APRJ20041.ITM_SER_NUM                   itmSerNum                         /* 항목 ID                        */
+                   , APRJ20041.ITM_VAL                       itmVal                            /* 항목 값                        */
+                   , (
+                       SELECT COUNT(*) 
+                       FROM APRJ20041 
+                       WHERE 1 = 1
+                       AND    APRJ20041.CO_ID        = APRJ20040.CO_ID
+                       AND    APRJ20041.OP_ID        = APRJ20040.OP_ID     
+                       AND    APRJ20041.OP_SER_NUM   = APRJ20040.OP_SER_NUM
+                       AND    APRJ20041.REQ_SER_NUM  = APRJ20040.REQ_SER_NUM
+                     )                                       itmCnt
+
+                   , APRJ20030.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20030.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20030.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20030.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20030.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20030.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20030
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ20030.CO_ID
+
+                   LEFT OUTER JOIN APRJ10040
+                   ON     APRJ10040.CO_ID        = APRJ20030.CO_ID
+                   AND    APRJ10040.CYCL_ID      = APRJ20030.CYCL_ID
+
+                   LEFT OUTER JOIN APRJ10030
+                   ON     APRJ10030.CO_ID        = APRJ20030.CO_ID
+                   AND    APRJ10030.STM_ID       = APRJ20030.STM_ID
+
+                   LEFT OUTER JOIN APRJ20040
+                   ON     APRJ20040.CO_ID        = APRJ20030.CO_ID
+                   AND    APRJ20040.OP_ID        = APRJ20030.OP_ID     
+                   AND    APRJ20040.OP_SER_NUM   = APRJ20030.OP_SER_NUM
+                   
+                   LEFT OUTER JOIN APRJ20041
+                   ON     APRJ20041.CO_ID        = APRJ20040.CO_ID
+                   AND    APRJ20041.OP_ID        = APRJ20040.OP_ID     
+                   AND    APRJ20041.OP_SER_NUM   = APRJ20040.OP_SER_NUM
+                   AND    APRJ20041.REQ_SER_NUM  = APRJ20040.REQ_SER_NUM
+                   
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20030.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20030.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryUser" >
+        <![CDATA[
+            SELECT
+                     APRJ20030.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ20030.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20030.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20030.OP_CTT                        opCtt                             /* 업무 내용                      */
+                   , APRJ20030.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20030.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20030.DRFT_DEPT_ID                  drftDeptId                        /* 기안 부서 ID                   */
+                   , APRJ20030.DRFT_DEPT_NM                  drftDeptNm                        /* 기안 부서 명                   */
+                   , APRJ20030.DRFT_OP_CHRG_ID               drftOpChrgId                      /* 기안 업무 담당 ID              */
+                   , APRJ20030.DRFT_OP_CHRG_NM               drftOpChrgNm                      /* 기안 업무 담당 명              */
+                   , APRJ20030.DRFT_USER_ID                  drftUserId                        /* 기안 사용자 ID                 */
+                   , APRJ20030.DRFT_USER_NM                  drftUserNm                        /* 기안 사용자 명                 */
+                   , APRJ20030.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ20030.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ20030.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000004'
+                        AND    ZCOM99011.CD     = APRJ20030.CYCL_CL_CD
+                     )                                       cyclClNm                          /* 주기 구분 명                   */
+                   , APRJ20030.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ20030.STM_ID                        stmId                             /* 결제 ID                        */
+                   , APRJ10030.STM_NM                        stmNm                             /* 결제 명                        */
+                   , APRJ20030.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20030.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20030.TRAN_DT                       tranDt                            /* 처리 일자                      */
+                   , APRJ20030.TRAN_ST_CD                    tranStCd                          /* 처리 상태 코드                 */
+                   , APRJ20030.AUTO_CL_CD                    autoClCd                          /* 자동 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000013'
+                        AND    ZCOM99011.CD     = APRJ20030.AUTO_CL_CD
+                     )                                       autoClNm                          /* 자동 구분 명                   */
+                   , APRJ20030.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20034.OP_CHRG_ID                    opChrgId                          /* 업무 담당 ID                   */
+                   , APRJ10020.OP_CHRG_NM                    opChrgNm                          /* 업무 담당 명                   */
+                   , APRJ20034.USER_ID                       userId                            /* 사용자 ID                      */
+                   , ZCOM99030.USER_NM                       userNm                            /* 사용자 명                      */
+                   , ZCOM99030.MAIL_ADDR                     mailAddr                          /* 메일 주소                      */
+                   , APRJ20034.RES_ST_CD                     resStCd                           /* 응답 상태 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000011'
+                        AND    ZCOM99011.CD     = APRJ20034.RES_ST_CD
+                     )                                       resStNm                           /* 응답 상태 명                   */
+                   , APRJ20034.RES_DT                        resDt                             /* 응답 일자                      */
+                   , IFNULL(APRJ20034.SIGN_CL_CD, '0000')    signClCd                          /* 서명 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000012'
+                        AND    ZCOM99011.CD     = IFNULL(APRJ20034.SIGN_CL_CD, '0000')
+                     )                                       signClNm                          /* 서명 구분 명                   */
+                   , APRJ20034.SIGN_DTM                      signDtm                           /* 서명 일시                      */
+                   
+                   , (
+                        SELECT MAX(APRJ20050.RES_SER_NUM) RES_SER_NUM
+                        FROM   APRJ20050
+                        WHERE  1 = 1
+                        AND    APRJ20050.CO_ID      = APRJ20034.CO_ID
+                        AND    APRJ20050.OP_ID      = APRJ20034.OP_ID
+                        AND    APRJ20050.OP_SER_NUM = APRJ20034.OP_SER_NUM
+                        AND    APRJ20050.OP_CHRG_ID = APRJ20034.OP_CHRG_ID
+                        AND    APRJ20050.USER_ID    = APRJ20034.USER_ID
+                        AND    APRJ20050.RES_ST_CD IN ('1000', '2000', '4000')
+                     )                                       resSerNum
+            FROM   APRJ20030
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ20030.CO_ID
+
+                   LEFT OUTER JOIN APRJ20034
+                   ON     APRJ20034.CO_ID      = APRJ20030.CO_ID
+                   AND    APRJ20034.OP_ID      = APRJ20030.OP_ID
+                   AND    APRJ20034.OP_SER_NUM = APRJ20030.OP_SER_NUM
+
+                   LEFT OUTER JOIN APRJ10030
+                   ON     APRJ10030.CO_ID      = APRJ20030.CO_ID
+                   AND    APRJ10030.STM_ID     = APRJ20030.STM_ID
+
+                   LEFT OUTER JOIN APRJ10020
+                   ON     APRJ10020.CO_ID      = APRJ20034.CO_ID
+                   AND    APRJ10020.OP_CHRG_ID = APRJ20034.OP_CHRG_ID
+
+                   LEFT OUTER JOIN ZCOM99030
+                   ON     ZCOM99030.USER_ID    = APRJ20034.USER_ID
+
+            WHERE  1 = 1
+            AND    APRJ20034.USER_ID IS NOT NULL
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQuerySchedule" >
+        <![CDATA[
+            SELECT
+                     APRJ20030.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20030.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20030.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20030.OP_NM                         opNm                              /* 업무 명                        */
+                   , APRJ20030.OP_CTT                        opCtt                             /* 업무 내용                      */
+                   , APRJ20030.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20030.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20030.DRFT_DEPT_ID                  drftDeptId                        /* 기안 부서 ID                   */
+                   , APRJ20030.DRFT_DEPT_NM                  drftDeptNm                        /* 기안 부서 명                   */
+                   , APRJ20030.DRFT_OP_CHRG_ID               drftOpChrgId                      /* 기안 업무 담당 ID              */
+                   , APRJ20030.DRFT_OP_CHRG_NM               drftOpChrgNm                      /* 기안 업무 담당 명              */
+                   , APRJ20030.DRFT_USER_ID                  drftUserId                        /* 기안 사용자 ID                 */
+                   , APRJ20030.DRFT_USER_NM                  drftUserNm                        /* 기안 사용자 명                 */
+                   , APRJ20030.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ20030.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ20030.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , APRJ20030.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ20030.STM_ID                        stmId                             /* 결제 ID                        */
+                   , APRJ20030.EFF_STA_DT                    effStaDt                          /* 유효 시작 일자                 */
+                   , APRJ20030.EFF_END_DT                    effEndDt                          /* 유효 종료 일자                 */
+                   , APRJ20030.TRAN_DT                       tranDt                            /* 처리 일자                      */
+                   , APRJ20030.TRAN_ST_CD                    tranStCd                          /* 처리 상태 코드                 */
+                   , APRJ20030.AUTO_CL_CD                    autoClCd                          /* 자동 구분 코드                 */
+                   , APRJ20030.DEL_YN                        delYn                             /* 삭제 여부                      */
+            FROM   APRJ20030
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_00" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트수조회 -->
+    <select id="selectAPRJ20030_01" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전조회 -->
+    <select id="selectAPRJ20030_02" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20030.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20030.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20030.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_03" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQueryUser" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    DATE_FORMAT(NOW(), '%Y%m%d') BETWEEN APRJ20030.STD_DT
+                                                    AND IFNULL(APRJ20030.EFF_END_DT, '99991231')
+            AND    APRJ20030.TRAN_ST_CD = '2000'
+            GROUP BY
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+                   , APRJ20030.OP_SER_NUM
+                   , APRJ20034.OP_CHRG_ID
+                   , APRJ20034.USER_ID
+            ORDER BY 
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+                   , APRJ20030.OP_SER_NUM
+                   , APRJ20034.OP_CHRG_ID
+                   , APRJ20034.USER_ID
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트수조회 -->
+    <select id="selectAPRJ20030_04" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQueryUser"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    DATE_FORMAT(NOW(), '%Y%m%d') BETWEEN APRJ20030.STD_DT
+                                                    AND IFNULL(APRJ20030.EFF_END_DT, '99991231')
+            AND    APRJ20030.TRAN_ST_CD = '2000'
+            GROUP BY
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+                   , APRJ20030.OP_SER_NUM
+                   , APRJ20034.OP_CHRG_ID
+                   , APRJ20034.USER_ID
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트수조회 -->
+    <select id="selectAPRJ20030_05" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQueryUser" />
+        <![CDATA[
+            AND    APRJ20030.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20030.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20030.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20034.OP_CHRG_ID                     = #{opChrgId}                       /* 업무 담당 ID                   */
+            AND    APRJ20034.USER_ID                        = #{userId}                         /* 사용자 ID                      */
+            GROUP BY
+                     APRJ20034.OP_CHRG_ID
+                   , APRJ20034.USER_ID
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_06" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQueryUser" />
+        <![CDATA[
+            AND    APRJ20034.RES_ST_CD IN ('1000', '2000', '4000')                           /* 응답 상태 코드                 */
+        ]]>
+        <include refid="WhereQuery" />
+        <![CDATA[
+            GROUP BY
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+                   , APRJ20030.OP_SER_NUM
+                   , APRJ20034.OP_CHRG_ID
+                   , APRJ20034.USER_ID
+            ORDER BY 
+                     APRJ20030.CO_ID
+                   , APRJ20034.USER_ID
+                   , APRJ20034.OP_CHRG_ID
+                   , APRJ20030.OP_ID
+                   , APRJ20030.OP_SER_NUM
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_07" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuerySchedule" />
+        <![CDATA[
+            AND    APRJ20030.TRAN_ST_CD = '2000'
+            AND    APRJ20030.AUTO_CL_CD = '1000'
+            AND    APRJ20030.EFF_END_DT = DATE_FORMAT(NOW()  - INTERVAL 1 DAY, '%Y%m%d')
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_08" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuerySchedule" />
+        <![CDATA[
+            AND    APRJ20030.TRAN_ST_CD = '1000'
+            AND    APRJ20030.STD_DT     = DATE_FORMAT(NOW(), '%Y%m%d')
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전리스트조회 -->
+    <select id="selectAPRJ20030_10" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQueryExcel" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ20030.CO_ID
+                   , APRJ20030.OP_ID
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전조회 -->
+    <select id="insertAPRJ20030_00_1" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT IFNULL(MAX(OP_SER_NUM), 0) + 1 opSerNum
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전조회 -->
+    <select id="insertAPRJ20030_00_2" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT IFNULL(MAX(OP_SEQ_NUM), 0) + 1 opSeqNum
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전조회 -->
+    <select id="insertAPRJ20030_00_3" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT CONCAT('USER', LPAD(IFNULL(SUBSTRING(MAX(OP_ID), 5), 0) + 1, 6, '0')) opId
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                       LIKE CONCAT('USER', '%')               /* 업무 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무버전등록 -->
+    <insert id="insertAPRJ20030_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20030
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , OP_NM                             /* 업무 명                        */
+                   , OP_CTT                            /* 업무 내용                      */
+                   , OP_VER                            /* 업무 버전                      */
+                   
+                   , DRFT_DEPT_ID                      /* 기안 부서 ID                   */
+                   , DRFT_DEPT_NM                      /* 기안 부서 명                   */
+                   , DRFT_OP_CHRG_ID                   /* 기안 업무 담당 ID              */
+                   , DRFT_OP_CHRG_NM                   /* 기안 업무 담당 명              */
+                   , DRFT_USER_ID                      /* 기안 사용자 ID                 */
+                   , DRFT_USER_NM                      /* 기안 사용자 명                 */
+                   
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STM_ID                            /* 결제 ID                        */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , TRAN_DT                           /* 처리 일자                      */
+                   , TRAN_ST_CD                        /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                        /* 자동 구분 코드                 */
+                   
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{opId}                           /* 업무 ID                        */
+                   , #{opSerNum}                       /* 업무 일련번호                  */
+                   , #{opNm}                           /* 업무 명                        */
+                   , #{opCtt}                          /* 업무 내용                      */
+                   , #{opVer}                          /* 업무 버전                      */
+                   
+                   , #{drftDeptId}                     /* 기안 부서 ID                   */
+                   , #{drftDeptNm}                     /* 기안 부서 명                   */
+                   , #{drftOpChrgId}                   /* 기안 업무 담당 ID              */
+                   , #{drftOpChrgNm}                   /* 기안 업무 담당 명              */
+                   , #{drftUserId}                     /* 기안 사용자 ID                 */
+                   , #{drftUserNm}                     /* 기안 사용자 명                 */
+                   
+                   , #{cyclId}                         /* 주기 ID                        */
+                   , #{prdCnt}                         /* 기간 수                        */
+                   , #{cyclClCd}                       /* 주기 구분 코드                 */
+                   , #{stdDt}                          /* 기준 일자                      */
+                   , #{stmId}                          /* 결제 ID                        */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   , #{tranDt}                         /* 처리 일자                      */
+                   , #{tranStCd}                       /* 처리 상태 코드                 */
+                   , #{autoClCd}                       /* 자동 구분 코드                 */
+                   
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무버전등록 -->
+    <insert id="insertAPRJ20030_10" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20030
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , OP_NM                             /* 업무 명                        */
+                   , OP_CTT                            /* 업무 내용                      */
+                   , OP_VER                            /* 업무 버전                      */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   
+                   , DRFT_DEPT_ID                      /* 기안 부서 ID                   */
+                   , DRFT_DEPT_NM                      /* 기안 부서 명                   */
+                   , DRFT_OP_CHRG_ID                   /* 기안 업무 담당 ID              */
+                   , DRFT_OP_CHRG_NM                   /* 기안 업무 담당 명              */
+                   , DRFT_USER_ID                      /* 기안 사용자 ID                 */
+                   , DRFT_USER_NM                      /* 기안 사용자 명                 */
+
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STM_ID                            /* 결제 ID                        */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   
+                   , TRAN_DT                           /* 처리 일자                      */
+                   , TRAN_ST_CD                        /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                        /* 자동 구분 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            )
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , 1                                 /* 업무 일련번호                  */
+                   , OP_NM                             /* 업무 명                        */
+                   , OP_CTT                            /* 업무 내용                      */
+                   , OP_VER                            /* 업무 버전                      */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   
+                   , #{drftDeptId}                     /* 기안 부서 ID                   */
+                   , #{drftDeptNm}                     /* 기안 부서 명                   */
+                   , #{drftOpChrgId}                   /* 기안 업무 담당 ID              */
+                   , #{drftOpChrgNm}                   /* 기안 업무 담당 명              */
+                   , #{rgstId}                         /* 기안 사용자 ID                 */
+                   , #{rgstNm}                         /* 기안 사용자 명                 */
+
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , #{stdDt}                          /* 기준 일자                      */
+                   , STM_ID                            /* 결제 ID                        */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   
+                   , #{tranDt}                         /* 처리 일자                      */
+                   , #{tranStCd}                       /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                        /* 자동 구분 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    (CO_ID, OP_ID, OP_SER_NUM) IN (
+        ]]>
+        <include refid="Zcom00000Query.selectAPRJ20031_00" />
+        <![CDATA[
+                                                 )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무버전등록 -->
+    <insert id="insertAPRJ20030_20" parameterType="Aprj20030Model" >
+        <selectKey order="BEFORE" keyProperty="verUpOpSerNum" resultType="java.lang.String" >
+        <![CDATA[
+            SELECT IFNULL(MAX(OP_SER_NUM), 0) + 1 verUpOpSerNum
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+        ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO APRJ20030
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , OP_NM                             /* 업무 명                        */
+                   , OP_CTT                            /* 업무 내용                      */
+                   , OP_VER                            /* 업무 버전                      */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   
+                   , DRFT_DEPT_ID                      /* 기안 부서 ID                   */
+                   , DRFT_DEPT_NM                      /* 기안 부서 명                   */
+                   , DRFT_OP_CHRG_ID                   /* 기안 업무 담당 ID              */
+                   , DRFT_OP_CHRG_NM                   /* 기안 업무 담당 명              */
+                   , DRFT_USER_ID                      /* 기안 사용자 ID                 */
+                   , DRFT_USER_NM                      /* 기안 사용자 명                 */
+
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STM_ID                            /* 결제 ID                        */
+                   , EFF_STA_DT                        /* 유효 시작 일자                 */
+                   , EFF_END_DT                        /* 유효 종료 일자                 */
+                   , TRAN_DT                           /* 처리 일자                      */
+                   , TRAN_ST_CD                        /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                        /* 자동 구분 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , #{verUpOpSerNum}                  /* 업무 일련번호                  */
+                   , OP_NM                             /* 업무 명                        */
+                   , OP_CTT                            /* 업무 내용                      */
+                   , OP_VER                            /* 업무 버전                      */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , PRJ_NM                            /* 프로젝트 명                    */
+                   
+                   , #{drftDeptId}                     /* 기안 부서 ID                   */
+                   , #{drftDeptNm}                     /* 기안 부서 명                   */
+                   , #{drftOpChrgId}                   /* 기안 업무 담당 ID              */
+                   , #{drftOpChrgNm}                   /* 기안 업무 담당 명              */
+                   , #{rgstId}                         /* 기안 사용자 ID                 */
+                   , #{rgstNm}                         /* 기안 사용자 명                 */
+
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , #{stdDt}                          /* 기준 일자                      */
+                   , STM_ID                            /* 결제 ID                        */
+                   , #{effStaDt}                       /* 유효 시작 일자                 */
+                   , #{effEndDt}                       /* 유효 종료 일자                 */
+                   
+                   , #{tranDt}                         /* 처리 일자                      */
+                   , #{tranStCd}                       /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                        /* 자동 구분 코드                 */
+                   , DEL_YN                            /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+
+            FROM   APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무버전수정 -->
+    <update id="updateAPRJ20030_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            UPDATE APRJ20030 SET
+                     OP_NM                          = #{opNm}                           /* 업무 명                        */
+                   , OP_CTT                         = #{opCtt}                          /* 업무 내용                      */
+                   , OP_VER                         = #{opVer}                          /* 업무 버전                      */
+                   , PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+                   , PRJ_NM                         = #{prjNm}                          /* 프로젝트 명                    */
+                   , DRFT_DEPT_ID                   = #{drftDeptId}                     /* 기안 부서 ID                   */
+                   , DRFT_DEPT_NM                   = #{drftDeptNm}                     /* 기안 부서 명                   */
+                   , DRFT_OP_CHRG_ID                = #{drftOpChrgId}                   /* 기안 업무 담당 ID              */
+                   , DRFT_OP_CHRG_NM                = #{drftOpChrgNm}                   /* 기안 업무 담당 명              */
+                   , DRFT_USER_ID                   = #{drftUserId}                     /* 기안 사용자 ID                 */
+                   , DRFT_USER_NM                   = #{drftUserNm}                     /* 기안 사용자 명                 */
+                   , CYCL_ID                        = #{cyclId}                         /* 주기 ID                        */
+                   , PRD_CNT                        = #{prdCnt}                         /* 기간 수                        */
+                   , CYCL_CL_CD                     = #{cyclClCd}                       /* 주기 구분 코드                 */
+                   , STD_DT                         = #{stdDt}                          /* 기준 일자                      */
+                   , STM_ID                         = #{stmId}                          /* 결제 ID                        */
+                   , EFF_STA_DT                     = #{effStaDt}                       /* 유효 시작 일자                 */
+                   , EFF_END_DT                     = #{effEndDt}                       /* 유효 종료 일자                 */
+                   , TRAN_DT                        = #{tranDt}                         /* 처리 일자                      */
+                   , TRAN_ST_CD                     = #{tranStCd}                       /* 처리 상태 코드                 */
+                   , AUTO_CL_CD                     = #{autoClCd}                       /* 자동 구분 코드                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_업무버전수정 -->
+    <update id="updateAPRJ20030_01" parameterType="Aprj20030Model" >
+        <![CDATA[
+            UPDATE APRJ20030 SET
+                     TRAN_DT                        = #{tranDt}                         /* 처리 일자                      */
+                   , TRAN_ST_CD                     = #{tranStCd}                       /* 처리 상태 코드                 */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_업무버전수정 -->
+    <update id="updateAPRJ20030_02" parameterType="Aprj20030Model" >
+        <![CDATA[
+            UPDATE APRJ20030 SET
+                     PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+                   , PRJ_NM                         = #{prjNm}                          /* 프로젝트 명                    */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_업무버전삭제 -->
+    <delete id="deleteAPRJ20030_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            DELETE FROM APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_업무버전삭제 -->
+    <delete id="deleteAPRJ20030_01" parameterType="Aprj20030Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ20030
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_업무버전삭제 -->
+    <delete id="deleteAPRJ20030_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ20030
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj10040Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ10040.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCyclId)">
+            AND    APRJ10040.CYCL_ID                     LIKE CONCAT('%', #{srchCyclId}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCyclNm)">
+            AND    APRJ10040.CYCL_NM                     LIKE CONCAT('%', #{srchCyclNm}, '%')
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchPrdCnt)">
+            AND    APRJ10040.PRD_CNT                        = #{srchPrdCnt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCyclClCd)">
+            AND    APRJ10040.CYCL_CL_CD                     = #{srchCyclClCd}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStdDt)">
+            AND    APRJ10040.STD_DT                         = #{srchStdDt}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchStdH)">
+            AND    APRJ10040.STD_H                          = #{srchStdH}
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ10040.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ10040.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ10040.CYCL_NM                       cyclNm                            /* 주기 명                        */
+                   , APRJ10040.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ10040.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000004'
+                        AND    ZCOM99011.CD     = APRJ10040.CYCL_CL_CD
+                     )                                       cyclClNm                          /* 주기 구분 명                   */
+                   , APRJ10040.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ10040.STD_H                         stdH                              /* 기준 시                        */
+                   , APRJ10040.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10040.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10040.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10040.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10040.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10040.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10040.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10040
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ10040.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10040.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10040.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryExcel" >
+        <![CDATA[
+            SELECT
+                     APRJ10040.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ10040.CYCL_ID                       cyclId                            /* 주기 ID                        */
+                   , APRJ10040.CYCL_NM                       cyclNm                            /* 주기 명                        */
+                   , APRJ10040.PRD_CNT                       prdCnt                            /* 기간 수                        */
+                   , APRJ10040.CYCL_CL_CD                    cyclClCd                          /* 주기 구분 코드                 */
+                   , (
+                        SELECT ZCOM99011.CD_NM 
+                        FROM   ZCOM99011 
+                        WHERE  ZCOM99011.GRP_CD = 'APRJ000004'
+                        AND    ZCOM99011.CD     = APRJ10040.CYCL_CL_CD
+                     )                                       cyclClNm                          /* 주기 구분 명                   */
+                   , APRJ10040.STD_DT                        stdDt                             /* 기준 일자                      */
+                   , APRJ10040.STD_H                         stdH                              /* 기준 시                        */
+                   , APRJ10040.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10040.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10040.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10040.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10040.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10040.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10040.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10040
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ10040.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10040.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10040.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 설정_업무주기리스트조회 -->
+    <select id="selectAPRJ10040_00" parameterType="Aprj10040Model" resultType="Aprj10040Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ10040.CO_ID                         
+                   , APRJ10040.CYCL_ID                       
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+
+    <!-- 설정_업무주기리스트수조회 -->
+    <select id="selectAPRJ10040_01" parameterType="Aprj10040Model" resultType="Aprj10040Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 설정_업무주기조회 -->
+    <select id="selectAPRJ10040_02" parameterType="Aprj10040Model" resultType="Aprj10040Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ10040.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10040.CYCL_ID                        = #{cyclId}                         /* 주기 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 설정_업무주기리스트조회 -->
+    <select id="selectAPRJ10040_10" parameterType="Aprj10040Model" resultType="java.util.Map" >
+        <include refid="InlineViewQueryExcel" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                     APRJ10040.CO_ID                         
+                   , APRJ10040.CYCL_ID                       
+        ]]>
+    </select>
+
+
+    <!-- 설정_업무주기등록 -->
+    <insert id="insertAPRJ10040_00" parameterType="Aprj10040Model" >
+        <![CDATA[
+            INSERT INTO APRJ10040
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , CYCL_NM                           /* 주기 명                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STD_H                             /* 기준 시                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{cyclId}                         /* 주기 ID                        */
+                   , #{cyclNm}                         /* 주기 명                        */
+                   , #{prdCnt}                         /* 기간 수                        */
+                   , #{cyclClCd}                       /* 주기 구분 코드                 */
+                   , #{stdDt}                          /* 기준 일자                      */
+                   , #{stdH}                           /* 기준 시                        */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 설정_업무주기등록 -->
+    <insert id="insertAPRJ10040_10" parameterType="AprjModel" >
+        <![CDATA[
+            INSERT INTO APRJ10040
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , CYCL_NM                           /* 주기 명                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STD_H                             /* 기준 시                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , CYCL_ID                           /* 주기 ID                        */
+                   , CYCL_NM                           /* 주기 명                        */
+                   , PRD_CNT                           /* 기간 수                        */
+                   , CYCL_CL_CD                        /* 주기 구분 코드                 */
+                   , STD_DT                            /* 기준 일자                      */
+                   , STD_H                             /* 기준 시                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            FROM   APRJ10040
+            WHERE  1 = 1
+            AND    CO_ID = '0000000000'
+        ]]>
+    </insert>
+
+
+    <!-- 설정_업무주기수정 -->
+    <update id="updateAPRJ10040_00" parameterType="Aprj10040Model" >
+        <![CDATA[
+            UPDATE APRJ10040 SET
+                     CYCL_NM                        = #{cyclNm}                         /* 주기 명                        */
+                   , PRD_CNT                        = #{prdCnt}                         /* 기간 수                        */
+                   , CYCL_CL_CD                     = #{cyclClCd}                       /* 주기 구분 코드                 */
+                   , STD_DT                         = #{stdDt}                          /* 기준 일자                      */
+                   , STD_H                          = #{stdH}                           /* 기준 시                        */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    CYCL_ID                        = #{cyclId}                         /* 주기 ID                        */
+        ]]>
+    </update>
+
+
+    <!-- 설정_업무주기삭제 -->
+    <delete id="deleteAPRJ10040_00" parameterType="Aprj10040Model" >
+        <![CDATA[
+            DELETE FROM APRJ10040
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    CYCL_ID                        = #{cyclId}                         /* 주기 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 설정_업무주기삭제 -->
+    <delete id="deleteAPRJ10040_01" parameterType="Aprj10040Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ10040
+        ]]>
+    </delete>
+    
+    
+    <!-- 설정_업무주기삭제 -->
+    <delete id="deleteAPRJ10040_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ10040
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

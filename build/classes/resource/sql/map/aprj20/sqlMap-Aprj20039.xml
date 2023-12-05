@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj20039Query">
+
+
+
+    <sql id="WhereQuery" >
+
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ20039.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20039.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20039.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20039.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20010.PRJ_NM                        prjNm                             /* 프로젝트 명                    */
+                   , APRJ20039.CTRL_NUM                      ctrlNum                           /* 통제 번호                      */
+                   , APRJ20020.CTRL_NM                       ctrlNm                            /* 통제 명                        */
+                   , APRJ20039.AST_CL_ID                     astClId                           /* 자산 구분 ID                   */
+                   , APRJ20039.AST_CL_NM                     astClNm                           /* 자산 구분 명                   */
+                   , APRJ20039.AST_ID                        astId                             /* 자산 ID                        */
+                   , APRJ20039.AST_NM                        astNm                             /* 자산 명                        */
+                   , APRJ20039.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ20039.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ20039.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ20039.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ20039.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ20039.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ20039.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ20039
+
+                   LEFT OUTER JOIN APRJ20010
+                   ON     APRJ20010.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ20010.PRJ_ID     = APRJ20039.PRJ_ID
+
+                   LEFT OUTER JOIN APRJ20020
+                   ON     APRJ20020.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ20020.PRJ_ID     = APRJ20039.PRJ_ID
+                   AND    APRJ20020.CTRL_NUM   = APRJ20039.CTRL_NUM
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ20039.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ20039.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <sql id="InlineViewQueryChrg" >
+        <![CDATA[
+           SELECT
+                     APRJ20039.CO_ID                         coId                              /* 업체 ID                        */
+                   , APRJ20039.OP_ID                         opId                              /* 업무 ID                        */
+                   , APRJ20039.OP_SER_NUM                    opSerNum                          /* 업무 일련번호                  */
+                   , APRJ20039.PRJ_ID                        prjId                             /* 프로젝트 ID                    */
+                   , APRJ20039.CTRL_NUM                      ctrlNum                           /* 통제 번호                      */
+                   , APRJ20039.AST_CL_ID                     astClId                           /* 자산 구분 ID                   */
+                   , APRJ20039.AST_CL_NM                     astClNm                           /* 자산 구분 명                   */
+                   , APRJ20039.AST_ID                        astId                             /* 자산 ID                        */
+                   , APRJ20039.AST_NM                        astNm                             /* 자산 명                        */
+                   , APRJ20039.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10021.OP_CHRG_ID                    opChrgId                          /* 업무 담당 ID                   */
+                   , APRJ10020.OP_CHRG_NM                    opChrgNm                          /* 업무 담당 명                   */
+
+                   , APRJ10021.USER_ID                       userId                            /* 업무 담당 ID                   */
+                   , ZCOM99030.USER_NM                       userNm                            /* 업무 담당 명                   */
+
+            FROM   APRJ20039
+
+                   LEFT OUTER JOIN APRJ10022
+                   ON     APRJ10022.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ10022.AST_CL_ID  = APRJ20039.AST_CL_ID
+
+                   LEFT OUTER JOIN APRJ10020
+                   ON     APRJ10020.CO_ID      = APRJ10022.CO_ID
+                   AND    APRJ10020.OP_CHRG_ID = APRJ10022.OP_CHRG_ID
+
+                   LEFT OUTER JOIN APRJ10021
+                   ON     APRJ10021.CO_ID      = APRJ10020.CO_ID
+                   AND    APRJ10021.OP_CHRG_ID = APRJ10020.OP_CHRG_ID
+                   
+                   LEFT OUTER JOIN ZCOM99030
+                   ON     ZCOM99030.USER_ID    = APRJ10021.USER_ID
+                   
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 프로젝트_업무자산리스트조회 -->
+    <select id="selectAPRJ20039_00" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            ORDER BY 
+                     APRJ20039.CO_ID                         
+                   , APRJ20039.OP_ID                         
+                   , APRJ20039.OP_SER_NUM                    
+                   , APRJ20039.PRJ_ID                        
+                   , APRJ20039.CTRL_NUM                      
+                   , APRJ20039.AST_CL_ID                     
+                   , APRJ20039.AST_ID                        
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 프로젝트_업무자산리스트수조회 -->
+    <select id="selectAPRJ20039_01" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무자산조회 -->
+    <select id="selectAPRJ20039_02" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20039.PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+            AND    APRJ20039.CTRL_NUM                       = #{ctrlNum}                        /* 통제 번호                      */
+            AND    APRJ20039.AST_CL_ID                      = #{astClId}                        /* 자산 구분 ID                   */
+            AND    APRJ20039.AST_ID                         = #{astId}                          /* 자산 ID                        */
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무자산리스트조회 -->
+    <select id="selectAPRJ20039_03" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            GROUP BY 
+                     APRJ20039.AST_ID                        
+            ORDER BY 
+                     APRJ20039.AST_ID                        
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 프로젝트_업무자산리스트수조회 -->
+    <select id="selectAPRJ20039_04" parameterType="Aprj20030Model" resultType="Aprj20030Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            GROUP BY 
+                     APRJ20039.AST_ID                        
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 프로젝트_업무자산등록 -->
+    <insert id="insertAPRJ20039_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20039
+            (
+                     OP_ID                             /* 업무 ID                        */
+                   , CO_ID                             /* 업체 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , CTRL_NUM                          /* 통제 번호                      */
+                   , AST_CL_ID                         /* 자산 구분 ID                   */
+                   , AST_CL_NM                         /* 자산 구분 명                   */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{opId}                           /* 업무 ID                        */
+                   , #{coId}                           /* 업체 ID                        */
+                   , #{opSerNum}                       /* 업무 일련번호                  */
+                   , #{prjId}                          /* 프로젝트 ID                    */
+                   , #{ctrlNum}                        /* 통제 번호                      */
+                   , #{astClId}                        /* 자산 구분 ID                   */
+                   , #{astId}                          /* 자산 ID                        */
+                   , #{astClNm}                        /* 자산 구분 명                   */
+                   , #{astNm}                          /* 자산 명                        */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무자산등록 -->
+    <insert id="insertAPRJ20039_01" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20039
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , CTRL_NUM                          /* 통제 번호                      */
+                   , AST_CL_ID                         /* 자산 구분 ID                   */
+                   , AST_CL_NM                         /* 자산 구분 명                   */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , #{opId}                           /* 업무 ID                        */
+                   , #{opSerNum}                       /* 업무 일련번호                  */
+                   , APRJ20038.PRJ_ID                  /* 프로젝트 ID                    */
+                   , APRJ20038.CTRL_NUM                /* 통제 번호                      */
+                   , APRJ20038.AST_CL_ID               /* 자산 구분 ID                   */
+                   , APRJ10010.AST_CL_NM               /* 자산 구분 명                   */
+                   , APRJ10011.AST_ID                  /* 자산 ID                        */
+                   , APRJ10012.AST_NM                  /* 자산 명                        */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            
+            FROM   APRJ20038
+            
+                   LEFT OUTER JOIN APRJ10010
+                   ON     APRJ10010.CO_ID      = APRJ20038.CO_ID
+                   AND    APRJ10010.AST_CL_ID  = APRJ20038.AST_CL_ID
+
+                   LEFT OUTER JOIN APRJ10011
+                   ON     APRJ10011.CO_ID      = APRJ20038.CO_ID
+                   AND    APRJ10011.AST_CL_ID  = APRJ20038.AST_CL_ID
+                   
+                   LEFT OUTER JOIN APRJ10012
+                   ON     APRJ10012.CO_ID      = APRJ10011.CO_ID
+                   AND    APRJ10012.AST_ID     = APRJ10011.AST_ID
+                   
+                   LEFT OUTER JOIN APRJ20039
+                   ON     APRJ20039.CO_ID      = APRJ20038.CO_ID
+                   AND    APRJ20039.OP_ID      = APRJ20038.OP_ID
+                   AND    APRJ20039.OP_SER_NUM = APRJ20038.OP_SER_NUM
+                   AND    APRJ20039.PRJ_ID     = APRJ20038.PRJ_ID
+                   AND    APRJ20039.CTRL_NUM   = APRJ20038.CTRL_NUM
+                   AND    APRJ20039.AST_CL_ID  = APRJ20038.AST_CL_ID
+                   AND    APRJ20039.AST_ID     = APRJ10011.AST_ID
+                   
+            WHERE  1 = 1
+            AND    APRJ20038.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20038.OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    APRJ20038.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    APRJ20038.PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+            AND    APRJ20038.CTRL_NUM                       = #{ctrlNum}                        /* 통제 번호                      */
+            AND    APRJ10011.AST_ID                        IS NOT NULL
+            AND    APRJ20039.AST_ID                        IS NULL
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무자산등록 -->
+    <insert id="insertAPRJ20039_10" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20039
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , CTRL_NUM                          /* 통제 번호                      */
+                   , AST_CL_ID                         /* 자산 구분 ID                   */
+                   , AST_CL_NM                         /* 자산 구분 명                   */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , APRJ20039.OP_ID                   /* 업무 ID                        */
+                   , 1                                 /* 업무 일련번호                  */
+                   , APRJ20039.PRJ_ID                  /* 프로젝트 ID                    */
+                   , APRJ20039.CTRL_NUM                /* 통제 번호                      */
+                   , APRJ20039.AST_CL_ID               /* 자산 구분 ID                   */
+                   , APRJ10010.AST_CL_NM               /* 자산 구분 명                   */
+                   , APRJ20039.AST_ID                  /* 자산 ID                        */
+                   , APRJ10012.AST_NM                  /* 자산 명                        */
+                   , APRJ20039.DEL_YN                  /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            FROM   APRJ20039
+            
+                   LEFT OUTER JOIN APRJ10010
+                   ON     APRJ10010.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ10010.AST_CL_ID  = APRJ20039.AST_CL_ID
+
+                   LEFT OUTER JOIN APRJ10012
+                   ON     APRJ10012.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ10012.AST_ID     = APRJ20039.AST_ID
+                   
+            WHERE  1 = 1
+            AND    (APRJ20039.CO_ID, APRJ20039.OP_ID, APRJ20039.OP_SER_NUM) IN (
+        ]]>
+        <include refid="Zcom00000Query.selectAPRJ20031_00" />
+        <![CDATA[
+                                                 )
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무자산등록 -->
+    <insert id="insertAPRJ20039_20" parameterType="Aprj20030Model" >
+        <![CDATA[
+            INSERT INTO APRJ20039
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , OP_ID                             /* 업무 ID                        */
+                   , OP_SER_NUM                        /* 업무 일련번호                  */
+                   , PRJ_ID                            /* 프로젝트 ID                    */
+                   , CTRL_NUM                          /* 통제 번호                      */
+                   , AST_CL_ID                         /* 자산 구분 ID                   */
+                   , AST_CL_NM                         /* 자산 구분 명                   */
+                   , AST_ID                            /* 자산 ID                        */
+                   , AST_NM                            /* 자산 명                        */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) 
+            SELECT
+                     #{coId}                           /* 업체 ID                        */
+                   , #{opId}                           /* 업무 ID                        */
+                   , #{verUpOpSerNum}                  /* 업무 일련번호                  */
+                   , APRJ20039.PRJ_ID                  /* 프로젝트 ID                    */
+                   , APRJ20039.CTRL_NUM                /* 통제 번호                      */
+                   , APRJ20039.AST_CL_ID               /* 자산 구분 ID                   */
+                   , APRJ10010.AST_CL_NM               /* 자산 구분 명                   */
+                   , APRJ20039.AST_ID                  /* 자산 ID                        */
+                   , APRJ10012.AST_NM                  /* 자산 명                        */
+                   , APRJ20039.DEL_YN                  /* 삭제 여부                      */
+
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            FROM   APRJ20039
+            
+                   LEFT OUTER JOIN APRJ10010
+                   ON     APRJ10010.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ10010.AST_CL_ID  = APRJ20039.AST_CL_ID
+
+                   LEFT OUTER JOIN APRJ10012
+                   ON     APRJ10012.CO_ID      = APRJ20039.CO_ID
+                   AND    APRJ10012.AST_ID     = APRJ20039.AST_ID
+                   
+            WHERE  1 = 1
+            AND    APRJ20039.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ20039.OP_ID                          = #{opId}                           /* 프로젝트 ID                    */
+            AND    APRJ20039.OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+        ]]>
+    </insert>
+
+
+    <!-- 프로젝트_업무자산수정 -->
+    <update id="updateAPRJ20039_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            UPDATE APRJ20039 SET
+                     AST_CL_NM                      = #{astClNm}                        /* 자산 구분 명                   */
+                   , AST_NM                         = #{astNm}                          /* 자산 명                        */
+                   , AST_CTT                        = #{astCtt}                         /* 자산 내용                      */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    PRJ_ID                         = #{prjId}                          /* 프로젝트 ID                    */
+            AND    CTRL_NUM                       = #{ctrlNum}                        /* 통제 번호                      */
+            AND    AST_CL_ID                      = #{astClId}                        /* 자산 구분 ID                   */
+            AND    AST_ID                         = #{astId}                          /* 자산 ID                        */
+        ]]>
+    </update>
+
+
+    <!-- 프로젝트_업무자산삭제 -->
+    <delete id="deleteAPRJ20039_00" parameterType="Aprj20030Model" >
+        <![CDATA[
+            DELETE FROM APRJ20039
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    OP_ID                          = #{opId}                           /* 업무 ID                        */
+            AND    OP_SER_NUM                     = #{opSerNum}                       /* 업무 일련번호                  */
+            AND    PRJ_ID                         = IFNULL(#{prjId}  , PRJ_ID   )     /* 프로젝트 ID                    */
+            AND    CTRL_NUM                       = IFNULL(#{ctrlNum}, CTRL_NUM )     /* 통제 번호                      */
+            AND    AST_CL_ID                      = IFNULL(#{astClId}, AST_CL_ID)     /* 자산 구분 ID                   */
+            AND    AST_ID                         = IFNULL(#{astId}  , AST_ID   )     /* 자산 ID                        */
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_업무자산삭제 -->
+    <delete id="deleteAPRJ20039_01" parameterType="Aprj20030Model" >
+        <![CDATA[
+            TRUNCATE TABLE APRJ20039
+        ]]>
+    </delete>
+
+
+    <!-- 프로젝트_업무자산삭제 -->
+    <delete id="deleteAPRJ20039_10" parameterType="AprjModel" >
+        <![CDATA[
+            DELETE FROM APRJ20039
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+        ]]>
+    </delete>
+
+
+</mapper>

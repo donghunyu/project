@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Aprj10052Query">
+
+
+
+    <sql id="WhereQuery" >
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchCoId)">
+            AND    APRJ10052.CO_ID                          = #{srchCoId}
+        </if>
+        <if test="@project.spring.app.a.lib.object.CommonMyBatis@isNotEmpty(srchFormId)">
+            AND    APRJ10052.FORM_ID                        = #{srchFormId}    
+        </if>
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     APRJ10052.CO_ID                         coId                              /* 업체 ID                        */
+                   , ZCOM99031.CO_NM                         coNm                              /* 업체 명                        */
+                   , APRJ10052.FORM_ID                       formId                            /* 양식 ID                        */
+                   , APRJ10052.REQ_SER_NUM                   reqSerNum                         /* 요청 일련번호                  */
+                   , APRJ10052.ITM_SER_NUM                   itmSerNum                         /* 항목 일련번호                  */
+                   , APRJ10052.ITM_VAL                       itmVal                            /* 항목 값                        */
+                   , APRJ10052.ITM_CTT                       itmCtt                            /* 항목 내용                      */
+                   , APRJ10052.DEL_YN                        delYn                             /* 삭제 여부                      */
+
+                   , APRJ10052.RGST_ID                       rgstId                            /* 등록 ID                        */
+                   , RGST     .USER_NM                       rgstNm                            /* 등록 명                        */
+                   , APRJ10052.RGST_IP                       rgstIp                            /* 등록 IP                        */
+                   , APRJ10052.RGST_DTM                      rgstDtm                           /* 등록 일시                      */
+                   , APRJ10052.UPDT_ID                       updtId                            /* 수정 ID                        */
+                   , UPDT     .USER_NM                       updtNm                            /* 수정 명                        */
+                   , APRJ10052.UPDT_IP                       updtIp                            /* 수정 IP                        */
+                   , APRJ10052.UPDT_DTM                      updtDtm                           /* 수정 일시                      */
+
+            FROM   APRJ10052
+
+                   LEFT OUTER JOIN ZCOM99031
+                   ON     ZCOM99031.CO_ID = APRJ10052.CO_ID
+
+                   LEFT OUTER JOIN ZCOM99030 RGST
+                   ON     RGST.USER_ID = APRJ10052.RGST_ID
+
+                   LEFT OUTER JOIN ZCOM99030 UPDT
+                   ON     UPDT.USER_ID = APRJ10052.UPDT_ID
+
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 설정_선택항목리스트조회 -->
+    <select id="selectAPRJ10052_00" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            AND    APRJ10052.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10052.FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    APRJ10052.REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 ID                        */
+            ORDER BY 
+                     APRJ10052.CO_ID                         
+                   , APRJ10052.FORM_ID                       
+                   , APRJ10052.REQ_SER_NUM                   
+                   , APRJ10052.ITM_SER_NUM                   
+        ]]>
+    </select>
+
+    <!-- 설정_선택항목리스트수조회 -->
+    <select id="selectAPRJ10052_01" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 설정_선택항목조회 -->
+    <select id="selectAPRJ10052_02" parameterType="Aprj10050Model" resultType="Aprj10050Model" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    APRJ10052.CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    APRJ10052.FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    APRJ10052.REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 일련번호                  */
+            AND    APRJ10052.ITM_SER_NUM                    = #{itmSerNum}                      /* 항목 일련번호                  */
+        ]]>
+    </select>
+
+
+    <!-- 설정_선택항목등록 -->
+    <insert id="insertAPRJ10052_00" parameterType="Aprj10050Model" >
+        <selectKey order="BEFORE" keyProperty="itmSerNum" resultType="java.lang.String" >
+        <![CDATA[
+            SELECT  IFNULL(MAX(ITM_SER_NUM), 0) + 1 itmSerNum
+            FROM    APRJ10052
+            WHERE   1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 ID                        */
+        ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO APRJ10052
+            (
+                     CO_ID                             /* 업체 ID                        */
+                   , FORM_ID                           /* 양식 ID                        */
+                   , REQ_SER_NUM                       /* 요청 일련번호                  */
+                   , ITM_SER_NUM                       /* 항목 일련번호                  */
+                   , ITM_VAL                           /* 항목 값                        */
+                   , ITM_CTT                           /* 항목 내용                      */
+                   , DEL_YN                            /* 삭제 여부                      */
+                   , RGST_ID                           /* 등록 ID                        */
+                   , RGST_IP                           /* 등록 IP                        */
+                   , RGST_DTM                          /* 등록 일시                      */
+                   , UPDT_ID                           /* 수정 ID                        */
+                   , UPDT_IP                           /* 수정 IP                        */
+                   , UPDT_DTM                          /* 수정 일시                      */
+            ) VALUES (
+                     #{coId}                           /* 업체 ID                        */
+                   , #{formId}                         /* 양식 ID                        */
+                   , #{reqSerNum}                      /* 요청 일련번호                  */
+                   , #{itmSerNum}                      /* 항목 일련번호                  */
+                   , #{itmVal}                         /* 항목 값                        */
+                   , #{itmCtt}                         /* 항목 내용                      */
+                   , #{delYn}                          /* 삭제 여부                      */
+                   , #{rgstId}                         /* 등록 ID                        */
+                   , #{rgstIp}                         /* 등록 IP                        */
+                   , #{rgstDtm}                        /* 등록 일시                      */
+                   , #{updtId}                         /* 수정 ID                        */
+                   , #{updtIp}                         /* 수정 IP                        */
+                   , #{updtDtm}                        /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 설정_선택항목수정 -->
+    <update id="updateAPRJ10052_00" parameterType="Aprj10050Model" >
+        <![CDATA[
+            UPDATE APRJ10052 SET
+                     ITM_VAL                        = #{itmVal}                         /* 항목 값                        */
+                   , ITM_CTT                        = #{itmCtt}                         /* 항목 내용                      */
+                   , DEL_YN                         = #{delYn}                          /* 삭제 여부                      */
+                   , UPDT_ID                        = #{updtId}                         /* 수정 ID                        */
+                   , UPDT_IP                        = #{updtIp}                         /* 수정 IP                        */
+                   , UPDT_DTM                       = #{updtDtm}                        /* 수정 일시                      */
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 일련번호                  */
+            AND    ITM_SER_NUM                    = #{itmSerNum}                      /* 항목 일련번호                  */
+        ]]>
+    </update>
+
+
+    <!-- 설정_선택항목삭제 -->
+    <delete id="deleteAPRJ10052_00" parameterType="Aprj10050Model" >
+        <![CDATA[
+            DELETE FROM APRJ10052
+            WHERE  1 = 1
+            AND    CO_ID                          = #{coId}                           /* 업체 ID                        */
+            AND    FORM_ID                        = #{formId}                         /* 양식 ID                        */
+            AND    REQ_SER_NUM                    = #{reqSerNum}                      /* 요청 ID                        */
+        ]]>
+    </delete>
+
+</mapper>

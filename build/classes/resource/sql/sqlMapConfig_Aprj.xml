@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    
+    <settings>
+        <setting name="jdbcTypeForNull" value="VARCHAR"/>
+        <setting name="returnInstanceForEmptyRow" value="true"/>
+    </settings>
+    
+    <!--********************* typeAliases **************************-->
+    <typeAliases>
+        
+        
+        <!--********************* 관리자   **************************-->
+        
+        <typeAlias alias="AprjModel"      type="project.spring.app.service.lib.object.AprjModel"     />     <!-- 관리자_공통               -->
+        
+        <typeAlias alias="Zcom99010Model" type="project.spring.app.service.lib.model.Zcom99010Model" />     <!-- 관리자_그룹코드           -->
+        <typeAlias alias="Zcom99020Model" type="project.spring.app.service.lib.model.Zcom99020Model" />     <!-- 관리자_메뉴               -->
+        <typeAlias alias="Zcom99022Model" type="project.spring.app.service.lib.model.Zcom99022Model" />     <!-- 관리자_사용자메뉴         -->
+        <typeAlias alias="Zcom99021Model" type="project.spring.app.service.lib.model.Zcom99021Model" />     <!-- 관리자_메뉴권한           -->
+        <typeAlias alias="Zcom99030Model" type="project.spring.app.service.lib.model.Zcom99030Model" />     <!-- 관리자_사용자             -->
+        <typeAlias alias="Zcom99031Model" type="project.spring.app.service.lib.model.Zcom99031Model" />     <!-- 관리자_업체               -->
+        <typeAlias alias="Zcom99032Model" type="project.spring.app.service.lib.model.Zcom99032Model" />     <!-- 관리자_부서               -->
+        <typeAlias alias="Zcom99040Model" type="project.spring.app.service.lib.model.Zcom99040Model" />     <!-- 관리자_임시로그인         -->
+        
+        
+        <typeAlias alias="Aprj10010Model" type="project.spring.app.service.lib.model.Aprj10010Model" />     <!-- 설정_자산                 -->
+        <typeAlias alias="Aprj10020Model" type="project.spring.app.service.lib.model.Aprj10020Model" />     <!-- 설정_업무담당             -->
+        <typeAlias alias="Aprj10030Model" type="project.spring.app.service.lib.model.Aprj10030Model" />     <!-- 설정_결제                 -->
+        <typeAlias alias="Aprj10040Model" type="project.spring.app.service.lib.model.Aprj10040Model" />     <!-- 설정_결제                 -->
+        <typeAlias alias="Aprj10050Model" type="project.spring.app.service.lib.model.Aprj10050Model" />     <!-- 설정_양식                 -->
+        
+        
+        <typeAlias alias="Aprj20010Model" type="project.spring.app.service.lib.model.Aprj20010Model" />     <!-- 프로젝트_프로젝트         -->
+        <typeAlias alias="Aprj20011Model" type="project.spring.app.service.lib.model.Aprj20011Model" />     <!-- 프로젝트_첨부파일         -->
+        <typeAlias alias="Aprj20020Model" type="project.spring.app.service.lib.model.Aprj20020Model" />     <!-- 프로젝트_통제             -->
+        <typeAlias alias="Aprj20030Model" type="project.spring.app.service.lib.model.Aprj20030Model" />     <!-- 프로젝트_업무             -->
+
+
+    </typeAliases>
+	
+    <mappers>
+        
+        <!--********************* INCLUDE **************************-->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom00000.xml" />     <!-- 공통코드        -->
+        
+        
+        
+        <!--********************* 관리자 **************************-->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99000.xml" />     <!-- 관리자_그룹사        -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99010.xml" />     <!-- 관리자_그룹코드           -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99011.xml" />     <!-- 관리자_코드               -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99020.xml" />     <!-- 관리자_메뉴               -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99021.xml" />     <!-- 관리자_메뉴권한           -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99022.xml" />     <!-- 관리자_사용자메뉴         -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99030.xml" />     <!-- 관리자_사용자             -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99031.xml" />     <!-- 관리자_업체               -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99032.xml" />     <!-- 관리자_부서               -->
+        <mapper resource="resource/sql/map/zcom99/sqlMap-Zcom99040.xml" />     <!-- 관리자_임시로그인         -->
+        
+        
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10010.xml" />     <!-- 설정_자산구분             -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10011.xml" />     <!-- 설정_자산구분자산         -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10012.xml" />     <!-- 설정_자산                 -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10020.xml" />     <!-- 설정_업무담당             -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10021.xml" />     <!-- 설정_업무담당자           -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10022.xml" />     <!-- 설정_업무자산             -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10030.xml" />     <!-- 설정_결제                 -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10031.xml" />     <!-- 설정_결제라인             -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10040.xml" />     <!-- 설정_업무주기             -->
+        <mapper resource="resource/sql/map/aprj10/sqlMap-Aprj10050.xml" />     <!-- 설정_양식                 -->
+
+        
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20010.xml" />     <!-- 프로젝트_프로젝트         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20011.xml" />     <!-- 프로젝트_첨부파일         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20020.xml" />     <!-- 프로젝트_통제             -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20021.xml" />     <!-- 프로젝트_통제자산         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20030.xml" />     <!-- 프로젝트_업무             -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20031.xml" />     <!-- 프로젝트_업무통제         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20032.xml" />     <!-- 프로젝트_결제라인         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20033.xml" />     <!-- 프로젝트_업무담당         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20034.xml" />     <!-- 프로젝트_업무담당자       -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20035.xml" />     <!-- 프로젝트_업무이관         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20036.xml" />     <!-- 프로젝트_결제담당자       -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20038.xml" />     <!-- 프로젝트_업무자산구분     -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20039.xml" />     <!-- 프로젝트_업무자산         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20040.xml" />     <!-- 프로젝트_요청             -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20041.xml" />     <!-- 프로젝트_선택항목         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20050.xml" />     <!-- 프로젝트_응답             -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20051.xml" />     <!-- 프로젝트_응답항목         -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20052.xml" />     <!-- 프로젝트_응답첨부파일     -->
+        <mapper resource="resource/sql/map/aprj20/sqlMap-Aprj20053.xml" />     <!-- 프로젝트_응답결제         -->
+        
+        
+        <mapper resource="resource/sql/map/aprj30/sqlMap-Aprj30010.xml" />     <!-- 보고서_프로젝트 현황      -->
+        <mapper resource="resource/sql/map/aprj30/sqlMap-Aprj30020.xml" />     <!-- 보고서_업무 현황          -->
+        <mapper resource="resource/sql/map/aprj30/sqlMap-Aprj30030.xml" />     <!-- 보고서_부서 현황          -->
+        <mapper resource="resource/sql/map/aprj30/sqlMap-Aprj30040.xml" />     <!-- 보고서_사용자 현황        -->
+        
+    </mappers>
+    
+    
+</configuration>
